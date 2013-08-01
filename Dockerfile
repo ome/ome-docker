@@ -1,8 +1,9 @@
 FROM ubuntu:12.04
 
 RUN echo "deb http://archive.ubuntu.com/ubuntu precise universe" >>/etc/apt/sources.list
-ADD . /tmp/
-RUN sh -eu /tmp/install.sh
+ADD . /tmp/docker/
+RUN sh -eu /tmp/docker/install.sh
+RUN rm -fr /tmp/docker/
 
 EXPOSE 4063:4063 4064:4064
 
