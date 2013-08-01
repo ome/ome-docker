@@ -3,7 +3,7 @@ FROM ubuntu:12.04
 EXPOSE 4063:4063
 EXPOSE 4064:4064
 
-RUN echo "deb http://gb.archive.ubuntu.com/ubuntu precise main universe" >/etc/apt/sources.list
+RUN echo "deb http://archive.ubuntu.com/ubuntu precise universe" >>/etc/apt/sources.list
 ADD . /tmp/
 RUN sh -eu /tmp/install.sh
 
