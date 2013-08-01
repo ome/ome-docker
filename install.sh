@@ -12,9 +12,9 @@ psql -h localhost -U omero omero </tmp/OMERO4.4__0.sql
 useradd -m omero
 
 apt-get install -y wget unzip
-su - omero -c "wget http://cvs.openmicroscopy.org.uk/snapshots/omero/4.4.8p1/OMERO.server-4.4.8p1-ice34-b304.zip -P /home/omero/"
+su - omero -c "wget http://cvs.openmicroscopy.org.uk/snapshots/omero/4.4.8p1/OMERO.server-4.4.8p1-ice34-b304.zip -P /tmp/"
 su - omero -c "unzip /home/omero/OMERO.server-4.4.8p1-ice34-b304.zip -d /home/omero/"
-su - omero -c "rm /home/omero/OMERO.server-4.4.8p1-ice34-b304.zip"
+su - omero -c "rm /tmp/OMERO.server-4.4.8p1-ice34-b304.zip"
 su - omero -c "ln -s /home/omero/OMERO.server-4.4.8p1-ice34-b304 /home/omero/OMERO.server"
 
 apt-get install -y zeroc-ice34 openjdk-7-jre-headless
