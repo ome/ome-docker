@@ -7,7 +7,7 @@ su - postgres -c "createuser -D -R -S omero"
 su - postgres -c "createdb -O omero omero"
 sed -i "/127.0.0.1/s/md5/trust/" /etc/postgresql/9.1/main/pg_hba.conf
 /etc/init.d/postgresql reload
-psql -h localhost -U omero omero </tmp/OMERO4.4__0.sql
+psql -h localhost -U omero omero </tmp/docker/OMERO4.4__0.sql
 
 useradd -m omero
 
