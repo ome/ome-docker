@@ -12,6 +12,10 @@ ENV PORT 5432
 
 RUN echo "listen_addresses = '*'" >> "$CONF"
 RUN perl -i -pe 's/^(host.*)md5$/$1trust/g' $HBA
+RUN echo "host    all             all             OMEROHOST/32           trust" >> $HBA
+
+RUN echo 'perl -i -pe "s/OMEROHOST/$OMERO_PORT_4064_TCP_ADDR/g" $HBA' >> ~/start.sh 
+RUN echo '"$EXEC" -p "$PORT" -D "$VAR" -c config_file="$CONF"' >> ~/start.sh
 
 USER postgres
-CMD "$EXEC" -p $PORT -D "$VAR" -c config_file="$CONF"
+CMD sh ~/start.sh
