@@ -22,6 +22,18 @@ RUN echo 'mkdir -p var/master' >> /home/omero/start.sh
 RUN echo 'mkdir -p var/registry' >> /home/omero/start.sh
 RUN echo 'icegridnode --nochdir --Ice.Config=etc/internal.cfg,etc/master.cfg --deploy etc/grid/default.xml' >> /home/omero/start.sh
 
+ENV PASSWORD omero
+
+RUN echo 'HOST="$PG_PORT_5432_TCP_ADDR"' >> /home/omero/init.sh
+RUN echo 'PORT="$PG_PORT_5432_TCP_PORT"' >> /home/omero/init.sh
+RUN echo 'cd /home/omero/OMERO-CURRENT' >> /home/omero/init.sh
+RUN echo 'bin/omero db script "" "" "$PASSWORD" -f /data/init_db.sql' >> /home/omero/init.sh
+RUN echo 'createuser -h "$HOST" -p "$PORT" -U postgres -s omero' >> /home/omero/init.sh
+RUN echo 'createdb -h "$HOST" -p "$PORT" -O omero omero' >> /home/omero/init.sh
+RUN echo 'psql -h "$HOST" -p "$PORT" -U omero omero -f /data/init_db.sql' >> /home/omero/init.sh
+
+RUN apt-get install -y postgresql-client-9.1
+
 USER omero
 ENV HOME /home/omero
 WORKDIR /home/omero
