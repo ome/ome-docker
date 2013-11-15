@@ -20,3 +20,6 @@ apt-get install -y zeroc-ice34 openjdk-7-jre-headless
 update-alternatives --set java /usr/lib/jvm/java-7-openjdk-amd64/jre/bin/java
 
 su - omero -c "/home/omero/OMERO.server/bin/omero db script -f - OMERO5.0DEV 6 ${ROOT_PASS-omero}" | PGPASSWORD=${DB_PASS-omero} psql -h ${DB_HOST-localhost} -U ${DB_USER-omero} ${DB_NAME-omero}
+
+echo 127.0.0.1 `hostname` >>/etc/hosts
+/etc/init.d/postgresql start
