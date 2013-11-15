@@ -15,9 +15,12 @@ RUN su - omero -c "ln -s OMERO.server* OMERO-CURRENT"
 RUN su - omero -c "~/OMERO-CURRENT/bin/omero config load /tmp/settings"
 RUN su - omero -c "mkdir ~/OMERO-DATA"
 
-RUN echo '$HOME/OMERO-CURRENT/bin/omero config set omero.db.host $PG_PORT_5432_TCP_ADDR' >> /home/omero/start.sh
-RUN echo '$HOME/OMERO-CURRENT/bin/omero config set omero.db.port $PG_PORT_5432_TCP_PORT' >> /home/omero/start.sh
-RUN echo '$HOME/OMERO-CURRENT/bin/omero' >> /home/omero/start.sh
+RUN echo 'cd /home/omero/OMERO-CURRENT' >> /home/omero/start.sh
+RUN echo 'bin/omero config set omero.db.host $PG_PORT_5432_TCP_ADDR' >> /home/omero/start.sh
+RUN echo 'bin/omero config set omero.db.port $PG_PORT_5432_TCP_PORT' >> /home/omero/start.sh
+RUN echo 'mkdir -p var/master' >> /home/omero/start.sh
+RUN echo 'mkdir -p var/registry' >> /home/omero/start.sh
+RUN echo 'icegridnode --nochdir --Ice.Config=etc/internal.cfg,etc/master.cfg --deploy etc/grid/default.xml' >> /home/omero/start.sh
 
 USER omero
 ENV HOME /home/omero
