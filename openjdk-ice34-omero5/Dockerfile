@@ -1,6 +1,6 @@
-FROM ubuntu:12.04
+FROM joshmoore/openjdk-ice34
 
-ADD . /tmp/docker/
+ADD .. /tmp/docker/
 RUN /tmp/docker/install-omero.sh
 RUN rm -fr /tmp/docker
 
