@@ -15,9 +15,12 @@ RUN su - omero -c "ln -s OMERO.server* OMERO-CURRENT"
 RUN su - omero -c "~/OMERO-CURRENT/bin/omero config load /tmp/settings"
 RUN su - omero -c "mkdir ~/OMERO-DATA"
 
-EXPOSE 4063:4063 4064:4064
+RUN echo '$HOME/OMERO-CURRENT/bin/omero config set omero.db.host $PG_PORT_5432_TCP_ADDR' >> /home/omero/start.sh
+RUN echo '$HOME/OMERO-CURRENT/bin/omero config set omero.db.port $PG_PORT_5432_TCP_PORT' >> /home/omero/start.sh
+RUN echo '$HOME/OMERO-CURRENT/bin/omero' >> /home/omero/start.sh
+
 USER omero
 ENV HOME /home/omero
 WORKDIR /home/omero
 
-CMD /home/omero/OMERO-CURRENT/bin/omero
+CMD sh start.sh
