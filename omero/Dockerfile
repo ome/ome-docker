@@ -17,5 +17,7 @@ RUN su - omero -c "mkdir ~/OMERO-DATA"
 
 EXPOSE 4063:4063 4064:4064
 USER omero
+ENV HOME /home/omero
+WORKDIR /home/omero
 
 CMD /home/omero/OMERO-CURRENT/bin/omero
