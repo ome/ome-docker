@@ -20,5 +20,6 @@ RUN /opt/anaconda/bin/conda install --yes numpy && \
 USER omero
 ENV HOME /home/omero
 WORKDIR /home/omero
+RUN echo 'export PATH=/opt/anaconda/bin:$PATH' >> .bashrc
 
 CMD bash
