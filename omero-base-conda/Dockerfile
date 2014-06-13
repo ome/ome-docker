@@ -1,7 +1,6 @@
-FROM joshmoore/openjdk-ice34
+FROM felix/openjdk
 MAINTAINER Josh Moore <josh@glencoesoftware.com>
 
-RUN sed 's/main$/main universe/' -i /etc/apt/sources.list
 RUN apt-get install -y bzip2 unzip wget
 
 RUN useradd -m omero
@@ -17,9 +16,19 @@ RUN /opt/anaconda/bin/conda install --yes numpy && \
     /opt/anaconda/bin/conda install --yes ipython && \
     /opt/anaconda/bin/conda install --yes pytables
 
+RUN echo 'export PATH=/opt/anaconda/bin:$PATH' >> .bashrc
+
+RUN apt-get install -y make g++
+RUN apt-get install -y libmcpp-dev libbz2-dev libexpat1-dev libssl-dev libdb5.1++-dev
+
+RUN apt-get install -y patch
+ADD Makefile.patch /tmp/
+ADD ice-build /tmp/ice-build
+RUN sh /tmp/ice-build && rm /tmp/ice-build
+
 USER omero
 ENV HOME /home/omero
 WORKDIR /home/omero
-RUN echo 'export PATH=/opt/anaconda/bin:$PATH' >> .bashrc
+RUN echo 'export PATH=/opt/anaconda/bin/:$PATH' >> ~/.bashrc
 
-CMD bash
+ENTRYPOINT bash
