@@ -63,16 +63,26 @@ categories = defaultdict(
     lambda: defaultdict(
         lambda: defaultdict(list)))
 
+szc = 0
+szn = 0
+szt = 0
 images = c.images()
 for image in images:
     image = DockerImage(**image)
     for tag in image.RepoTags:
         cat, name, tag = split_tag(tag)
+        szc = max(szc, len(cat))
+        szn = max(szn, len(name))
+        szt = max(szt, len(tag))
         categories[cat][name][tag].append(image)
 
+fmt = "%%-%ss  %%-%ss %%-%ss\t%%16s\t%%s" % (
+    szc, szn, szt)
+
+print fmt % ("Category", "Name", "Tag", "Size", "Etc")
 
 def echo(cat, name, tag, image, count):
-    print "%-16s /  %-24s : %-10s\t%16s\t%s" % (
+    print fmt % (
         cat, name, tag, sizeof(image.Size),
         (cnt > 1 and ("%s more" % cnt) or "")
     )
