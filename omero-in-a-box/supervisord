@@ -1,0 +1,6 @@
+# This script is run by Supervisor to start nginx in foreground mode
+
+export DIR=/data/supervisor
+mkdir -p $DIR
+cd $DIR
+exec /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
