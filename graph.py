@@ -25,32 +25,76 @@ between the Dockerfiles (and their dependencies) in
 this repository.
 """
 
+from sys import argv
 from os import environ
 from glob import glob
-
-from subprocess import PIPE
-from subprocess import Popen
 
 
 prefix = environ.get("PREFIX", "ome-docker")
 
-links = dict()
-dfiles = glob("*/Dockerfile")
-for dfile in dfiles:
-    with open(dfile, "r") as f:
-        txt = f.read()
-        for line in txt.split("\n"):
-            if line.startswith("FROM "):
-                source = line[5:]
-                target = dfile.split("/")[0]
-                target = "%s/%s" % (prefix, target)
-                try:
-                    links[source].append(target)
-                except KeyError:
-                    links[source] = [target]
 
-print "digraph Dockerfiles {"
-for source, targets in links.items():
-    for target in targets:
-        print '  "%s" -> "%s";' % (source, target)
-print "}"
+def load_graph():
+    graph = dict()
+    dfiles = glob("*/Dockerfile")
+    for dfile in dfiles:
+        with open(dfile, "r") as f:
+            txt = f.read()
+            for line in txt.split("\n"):
+                if line.startswith("FROM "):
+                    source = line[5:]
+                    target = dfile.split("/")[0]
+                    target = "%s/%s" % (prefix, target)
+                    try:
+                        graph[source].append(target)
+                    except KeyError:
+                        graph[source] = [target]
+    return graph
+
+
+def print_dot(graph):
+    print "digraph Dockerfiles {"
+    for source, targets in graph.items():
+        for target in targets:
+            print '  "%s" -> "%s";' % (source, target)
+    print "}"
+
+
+def topo_sort(source):
+    # See
+    # http://blog.jupo.org/2012/04/06/topological-sorting-acyclic-directed-graphs/
+    graph_unsorted = [(k, list(v)) for k, v in source.items()]
+
+    from collections import defaultdict
+    graph_unsorted = defaultdict(set)
+    for old_source, targets in source.items():
+        for target in targets:
+            graph_unsorted[target].add(old_source)
+
+    graph_sorted = []
+    graph_unsorted = dict(graph_unsorted)
+
+    while graph_unsorted:
+        acyclic = False
+        for node, edges in graph_unsorted.items():
+            for edge in edges:
+                if edge in graph_unsorted:
+                    break
+            else:
+                acyclic = True
+                del graph_unsorted[node]
+                graph_sorted.append((node, edges))
+
+        if not acyclic:
+            raise RuntimeError("A cyclic dependency occurred")
+
+    return graph_sorted
+
+
+if __name__ == "__main__":
+    g = load_graph()
+    if len(argv) == 1:
+        print_dot(g)
+    elif "--order":
+        for val, deps in topo_sort(g):
+            if val.startswith(prefix):
+                print val[len(prefix)+1:],
