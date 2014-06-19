@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# This script is run by Supervisor to start PostgreSQL 9.1 in foreground mode
+
+set -e
+set -u
+set -x
+export PGDATA=/data/postgresql
+export PGCONF=$PGDATA/postgresql.conf
+export PGBIN=/usr/lib/postgresql/9.1/bin/
+
+if [ -d $PGDATA ]; then
+    chmod 2700 $PGDATA
+else
+    install -d -m 2700 -o omero -g omero $PGDATA
+fi
+
+if [ ! -f $PGDATA/PG_VERSION ]; then
+    su omero -c $PGBIN/initdb
+fi
+
+chown -R omero:omero /var/run/postgresql
+exec su omero -c "$PGBIN/postgres -c config_file=$PGCONF"

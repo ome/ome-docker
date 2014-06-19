@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# This script is run by Supervisor to start OMERO.web in foreground mode
+
+set -e
+set -u
+set -x
+
+export OMERO_HOME=/opt/omero
+export PATH=$OMERO_HOME/bin:$PATH
+
+mkdir -p /data/OMERO
+chown omero:omero /data/OMERO
+
+rm -rf /opt/omero/var
+mkdir -p /opt/omero/var
+mkdir -p /opt/omero/var/master
+mkdir -p /opt/omero/var/registry
+
+mkdir -p /data/logs
+chown -R omero:omero /data/logs
+chown -R omero:omero /opt/omero/var/
+
+ln -s /data/logs /opt/omero/var/log
+
+cd /opt/omero
+su omero -c 'bin/omero config set omero.db.poolsize 50'
+
+sleep 2 # Until we have supervisord events
+su omero -c 'psql -hlocalhost -Uomero omero -c "select * from dbpatch"' || {
+    su omero -c 'createdb omero'
+    su omero -c 'bin/omero db script "" "" ome -f- | psql -hlocalhost -Uomero omero'
+}
+
+exec su omero -c 'icegridnode --nochdir --Ice.Config=etc/internal.cfg,etc/master.cfg --deploy etc/grid/default.xml'
