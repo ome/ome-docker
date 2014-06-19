@@ -1,0 +1,13 @@
+#!/bin/bash
+
+i="0"
+
+while [ $i -lt 30 ]
+do
+    i=$[$i+1]
+    if [ ! -f /opt/omero/bin/omero ]
+    then
+        echo "OMERO not yet installed"
+        sleep 10
+    fi
+done

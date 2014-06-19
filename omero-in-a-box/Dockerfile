@@ -30,6 +30,7 @@ ADD ./omero /omero
 ADD ./postgresql /postgresql
 ADD ./web /web
 ADD ./wait_on_postgresql /wait_on_postgresql
+ADD ./wait_on_omero /wait_on_omero
 
 EXPOSE 22 80 4064 4064 5432
 

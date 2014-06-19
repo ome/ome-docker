@@ -10,6 +10,7 @@ rm -rf /etc/nginx/conf.d/*
 rm -rf /etc/nginx/sites-available/*
 rm -rf /etc/nginx/sites-enabled/*
 
+/wait_on_omero
 su omero -c "/opt/omero/bin/omero web config nginx --system --http=80" >> /etc/nginx/conf.d/omero.conf
 
 grep -q "daemon off" $CONF || {

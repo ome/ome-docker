@@ -23,6 +23,9 @@ container:
 nodata:
 	$(DOCKER) run --rm -i -v $(OMERO):/opt/omero $(I)
 
+nomounts:
+	$(DOCKER) run --rm -i $(I)
+
 lowmem:
 	$(DOCKER) run --rm -i -v $(OMERO):/opt/omero -m=10000000      omedocker/omero-in-a-box
 
@@ -32,4 +35,4 @@ build:
 data:
 	$(DOCKER) run --name $(C) $(D) mkdir /data/supervisor
 
-.PHONY: run mount container nodata lowmem build
+.PHONY: run mount container nodata nomounts lowmem build data
