@@ -1,4 +1,4 @@
-FROM ome-docker/omero-base-conda
+FROM omedocker/omero-base-conda
 MAINTAINER ome-devel@lists.openmicroscopy.org.uk
 
 USER root

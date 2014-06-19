@@ -30,7 +30,7 @@ from os import environ
 from glob import glob
 
 
-prefix = environ.get("PREFIX", "ome-docker")
+prefix = environ.get("PREFIX", "omedocker")
 
 
 def load_graph():

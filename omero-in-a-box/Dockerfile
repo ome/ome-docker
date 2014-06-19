@@ -1,4 +1,4 @@
-FROM ome-docker/omero-base
+FROM omedocker/omero-base
 MAINTAINER ome-devel@lists.openmicroscopy.org.uk
 
 USER root

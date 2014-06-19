@@ -1,4 +1,4 @@
-FROM ome-docker/openjdk-ice34
+FROM omedocker/openjdk-ice34
 MAINTAINER ome-devel@lists.openmicroscopy.org.uk
 
 RUN sed 's/main$/main universe/' -i /etc/apt/sources.list
