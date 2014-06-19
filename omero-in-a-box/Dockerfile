@@ -5,6 +5,7 @@ USER root
 
 RUN apt-get install -y nginx postgresql postgresql-contrib supervisor
 
+RUN mkdir -p /data/supervisor
 RUN mkdir -p /data/OMERO
 RUN chown omero /data/OMERO
 RUN ln -s /data/OMERO /OMERO
