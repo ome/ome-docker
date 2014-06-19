@@ -1,7 +1,7 @@
 FROM omedocker/openjdk-ice34
 MAINTAINER ome-devel@lists.openmicroscopy.org.uk
 
-ENV BRANCH OMERO-merge-develop-ice34
+ENV BRANCH OMERO-5.0-merge-build
 
 RUN useradd -m omero
 RUN mkdir /OMERO
@@ -10,7 +10,7 @@ RUN echo omero.data.dir=/home/omero/OMERO-DATA >> /tmp/settings
 RUN apt-get install -y python-virtualenv wget unzip
 RUN su - omero -c "virtualenv --system-site-packages ~/venv"
 RUN su - omero -c "~/venv/bin/pip install omego"
-RUN su - omero -c "~/venv/bin/omego download --branch=$BRANCH server"
+RUN su - omero -c "~/venv/bin/omego download --branch=$BRANCH server --labels ICE=3.4"
 RUN su - omero -c "rm OMERO.server*zip"
 RUN su - omero -c "ln -s OMERO.server* OMERO-CURRENT"
 RUN su - omero -c "~/OMERO-CURRENT/bin/omero config load /tmp/settings"
