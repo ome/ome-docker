@@ -23,19 +23,21 @@
 Inspects the images in the local docker
 """
 
+import re
 import docker
 
 from collections import namedtuple
 from collections import defaultdict
 
-Tags = defaultdict(list)
+Pattern = re.compile("^((.*)/)?(.*?)(:(.*?))?$")
+
 Fields = ["Id", "RepoTags", "Size", "VirtualSize",
           "Created", "ParentId"]
 DockerImage = namedtuple("DockerImage", Fields)
 
 
 def sizeof(num):
-    for x in ['bytes','KB','MB','GB','TB']:
+    for x in ['bytes', 'KB', 'MB', 'GB', 'TB']:
         if num < 1024.0:
             return "%3.1f %-5s" % (num, x)
         num /= 1024.0
@@ -44,28 +46,47 @@ c = docker.Client(base_url='unix:///var/run/docker.sock',
                   version='1.9',
                   timeout=10)
 
+
+def split_tag(tag):
+    m = Pattern.match(tag)
+    if m is None:
+        return ("", tag, "")
+    else:
+        rv = [m.group(2), m.group(3), m.group(5)]
+        for idx, val in enumerate(rv):
+            if val is None:
+                rv[idx] = ""
+        return tuple(rv)
+
+
+categories = defaultdict(
+    lambda: defaultdict(
+        lambda: defaultdict(list)))
+
 images = c.images()
-tags = dict()
 for image in images:
     image = DockerImage(**image)
     for tag in image.RepoTags:
-        Tags[tag].append(image)
+        cat, name, tag = split_tag(tag)
+        categories[cat][name][tag].append(image)
 
 
-def echo(tag, image, count):
-    print "%-40s\t%16s\t%s" % (
-        tag, sizeof(image.Size),
+def echo(cat, name, tag, image, count):
+    print "%-16s /  %-24s : %-10s\t%16s\t%s" % (
+        cat, name, tag, sizeof(image.Size),
         (cnt > 1 and ("%s more" % cnt) or "")
     )
 
 
-for tag, images in sorted(Tags.items()):
+for cat, names in sorted(categories.items()):
+    for name, tags in sorted(names.items()):
+        for tag, images in sorted(tags.items()):
 
-    bydate = lambda a, b: cmp(a.Created, b.Created)
-    images.sort(bydate)
-    cnt = len(images)
+                bydate = lambda a, b: cmp(a.Created, b.Created)
+                images.sort(bydate)
+                cnt = len(images)
 
-    if cnt == 0:
-        continue
+                if cnt == 0:
+                    continue
 
-    echo(tag, images[0], cnt)
+                echo(cat, name, tag, images[0], cnt)
