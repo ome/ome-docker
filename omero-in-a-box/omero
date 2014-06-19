@@ -26,7 +26,8 @@ ln -s /data/logs /opt/omero/var/log
 cd /opt/omero
 su omero -c 'bin/omero config set omero.db.poolsize 50'
 
-sleep 2 # Until we have supervisord events
+/wait_on_postgresql # Until we have supervisord events
+
 su omero -c 'psql -hlocalhost -Uomero omero -c "select * from dbpatch"' || {
     su omero -c 'createdb omero'
     su omero -c 'bin/omero db script "" "" ome -f- | psql -hlocalhost -Uomero omero'
