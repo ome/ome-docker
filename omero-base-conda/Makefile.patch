@@ -1,0 +1,8 @@
+14,18c14
+< SUBDIRS		= config src include test
+< 
+< ifeq ($(shell uname | grep MINGW),)
+< SUBDIRS		:= $(SUBDIRS) demo
+< endif
+---
+> SUBDIRS		= config src include

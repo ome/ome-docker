@@ -1,0 +1,60 @@
+set -e
+set -u
+set -x
+
+################################################################
+## Config
+MAIN=3.5
+VERSION=$MAIN.1
+FILE=Ice-$VERSION.tar.gz
+
+unset ICE_HOME
+CONDA=/opt/anaconda
+SITE=$CONDA/lib/python2.7/site-packages
+INCL=$CONDA/include/python2.7
+
+################################################################
+## Unpack
+cd /tmp
+wget http://www.zeroc.com/download/Ice/$MAIN/$FILE
+echo "63599ea22a1e9638a49356682c9e516b7c2c454f  $FILE" >> $FILE.sha1
+sha1sum --check $FILE.sha1
+tar xzf $FILE
+cd ${FILE%.tar.gz}
+
+################################################################
+## CPP
+cd cpp
+patch Makefile < /tmp/Makefile.patch
+#rm /tmp/Makefile.patch
+cppmake() {
+    make \
+        CXXFLAGS="-pthread -fPIC -Wall -D_REENTRANT -I$INCL"
+        OPTIMIZE=yes
+    make install
+}
+cppmake
+cd ..
+
+################################################################
+## Python
+cd py
+pymake(){
+    make \
+        CXXFLAGS="-pthread -fPIC -Wall -D_REENTRANT -I$INCL"
+        OPTIMIZE=yes \
+    make install
+}
+pymake install
+cd ..
+
+################################################################
+# Lin & Test
+ln -s /opt/Ice-$VERSION /opt/Ice-$MAIN
+echo /opt/Ice-$MAIN/python >> /opt/anaconda/lib/python2.7/site-packages/ice.pth
+/opt/Ice-$VERSION/bin/icebox --version
+/opt/anaconda/bin/python -c "import Ice; print Ice.stringVersion()"
+
+################################################################
+# Cleanup
+rm -rf /tmp/Ice*

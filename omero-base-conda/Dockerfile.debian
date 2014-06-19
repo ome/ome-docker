@@ -1,5 +1,5 @@
 FROM felix/openjdk
-MAINTAINER ome-devel@lists.openmicroscopy.org.uk
+MAINTAINER Josh Moore <josh@glencoesoftware.com>
 
 RUN apt-get install -y bzip2 unzip wget
 
@@ -24,11 +24,16 @@ RUN apt-get install -y libmcpp-dev libbz2-dev libexpat1-dev libssl-dev libdb5.1+
 RUN apt-get install -y patch
 ADD Makefile.patch /tmp/
 ADD ice-build /tmp/ice-build
-RUN sh /tmp/ice-build && rm /tmp/ice-build
+
+### RUN apt-get install -y dpkg-dev
+### RUN apt-get install -y debian-keyring
+### RUN apt-get install -y debhelper
+### ADD ice-debian /tmp/ice-debian
+### RUN sh /tmp/ice-debian
 
 USER omero
 ENV HOME /home/omero
 WORKDIR /home/omero
 RUN echo 'export PATH=/opt/anaconda/bin/:$PATH' >> ~/.bashrc
 
-ENTRYPOINT bash
+CMD bash

@@ -1,0 +1,7 @@
+wget http://ftp.de.debian.org/debian/pool/main/z/zeroc-ice/zeroc-ice_3.5.1-6.dsc
+wget http://ftp.de.debian.org/debian/pool/main/z/zeroc-ice/zeroc-ice_3.5.1.orig.tar.gz
+wget http://ftp.de.debian.org/debian/pool/main/z/zeroc-ice/zeroc-ice_3.5.1-6.debian.tar.xz
+dpkg-source -x zeroc-ice_3.5.1-6.dsc
+cd zeroc-ice-3.5.1
+perl -i -ne 'print if not /rules-(rb|php|java|cs)/' debian/rules
+debian/rules
