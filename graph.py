@@ -32,7 +32,7 @@ from subprocess import PIPE
 from subprocess import Popen
 
 
-prefix = environ.get("PREFIX", "joshmoore")
+prefix = environ.get("PREFIX", "ome-docker")
 
 links = dict()
 dfiles = glob("*/Dockerfile")

@@ -1,4 +1,5 @@
-FROM joshmoore/openjdk-ice34
+FROM ome-docker/openjdk-ice34
+MAINTAINER ome-devel@lists.openmicroscopy.org.uk
 
 ENV BRANCH OMERO-merge-develop-ice34
 

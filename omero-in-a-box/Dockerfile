@@ -1,5 +1,5 @@
-FROM joshmoore/omero-base
-MAINTAINER Josh Moore <josh@glencoesoftware.com>
+FROM ome-docker/omero-base
+MAINTAINER ome-devel@lists.openmicroscopy.org.uk
 
 USER root
 

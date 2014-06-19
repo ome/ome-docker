@@ -1,5 +1,5 @@
-FROM joshmoore/omero-base-conda
-MAINTAINER josh@glencoesoftware.com
+FROM ome-docker/omero-base-conda
+MAINTAINER ome-devel@lists.openmicroscopy.org.uk
 
 USER root
 RUN cd /tmp && \

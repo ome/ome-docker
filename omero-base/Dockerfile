@@ -1,5 +1,5 @@
-FROM joshmoore/openjdk-ice34
-MAINTAINER Josh Moore <josh@glencoesoftware.com>
+FROM ome-docker/openjdk-ice34
+MAINTAINER ome-devel@lists.openmicroscopy.org.uk
 
 RUN sed 's/main$/main universe/' -i /etc/apt/sources.list
 RUN apt-get update
