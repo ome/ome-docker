@@ -1,5 +1,5 @@
 FROM busybox
-MAINTAINER Josh Moore <josh@glencoesoftware.com>
+MAINTAINER ome-devel@lists.openmicroscopy.org.uk
 
 run echo 'sysadmin:x:1000:1000::/data:/bin/sh' >> /etc/passwd
 run echo 'sysadmin:x:1000:' >> /etc/group
