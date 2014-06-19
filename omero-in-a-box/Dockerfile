@@ -36,4 +36,4 @@ EXPOSE 22 80 4064 4064 5432
 RUN dpkg-divert --local --rename --add /sbin/initctl
 RUN ln -s /bin/true /sbin/initctl
 
-ENTRYPOINT /supervisord
+CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]

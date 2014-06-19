@@ -13,4 +13,6 @@ su omero -c 'bin/omero web syncmedia'
 
 cd lib/python/omeroweb
 export PYTHONPATH=.:/opt/omero/lib/python
-exec su omero -c 'python manage.py runserver 0.0.0.0:4080 --noreload --nothreading'
+exec su omero -c 'python manage.py runfcgi workdir=./ method=prefork host=0.0.0.0 port=4080 \
+    pidfile=/opt/omero/var/django.pid daemonize=false \
+    maxchildren=5 minspare=1 maxspare=5 maxrequests=400'
