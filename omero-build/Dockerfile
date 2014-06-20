@@ -1,5 +1,5 @@
-FROM joshmoore/omero-base
-MAINTAINER Josh Moore <josh@glencoesoftware.com>
+FROM omedocker/omero-base
+MAINTAINER ome-devel@lists.openmicroscopy.org.uk
 
 USER root
 RUN apt-get install -y --no-install-recommends\
