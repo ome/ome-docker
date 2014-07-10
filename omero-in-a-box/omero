@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This script is run by Supervisor to start OMERO.web in foreground mode
+# This script is run by Supervisor to start OMERO in foreground mode
 
 set -e
 set -u
@@ -35,6 +35,7 @@ ln -s /data/logs /opt/omero/var/log
 
 cd /opt/omero
 su omero -c 'bin/omero config set omero.db.poolsize 50'
+su omero -c 'bin/omero admin memory || echo possibly old release'
 
 /wait_on_postgresql # Until we have supervisord events
 
