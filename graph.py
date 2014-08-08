@@ -31,6 +31,7 @@ from glob import glob
 
 
 prefix = environ.get("PREFIX", "omedocker")
+tag = environ.get("TAG", None)
 
 
 def load_graph():
@@ -44,6 +45,8 @@ def load_graph():
                     source = line[5:]
                     target = dfile.split("/")[0]
                     target = "%s/%s" % (prefix, target)
+                    if tag:
+                        target += ':%s' % tag
                     try:
                         graph[source].append(target)
                     except KeyError:
