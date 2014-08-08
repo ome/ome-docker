@@ -25,7 +25,7 @@ between the Dockerfiles (and their dependencies) in
 this repository.
 """
 
-from sys import argv
+from sys import argv, exit
 from os import environ
 from glob import glob
 
@@ -94,7 +94,10 @@ if __name__ == "__main__":
     g = load_graph()
     if len(argv) == 1:
         print_dot(g)
-    elif "--order":
+    elif len(argv) == 2 and argv[1] == "--order":
         for val, deps in topo_sort(g):
             if val.startswith(prefix):
                 print val[len(prefix)+1:],
+    else:
+        print "Invalid arguments"
+        exit(1)
