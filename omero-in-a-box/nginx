@@ -17,4 +17,4 @@ grep -q "daemon off" $CONF || {
     (echo "daemon off;"; cat $CONF) > /tmp/nginx.conf
     mv /tmp/nginx.conf $CONF
 }
-/usr/sbin/nginx
+exec /usr/sbin/nginx

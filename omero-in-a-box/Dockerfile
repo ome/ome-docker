@@ -19,6 +19,8 @@ ENV PGEXEC /usr/lib/postgresql/$PGVER/bin
 RUN echo "listen_addresses = '*'" >> "$PGCONF"
 RUN perl -i -pe 's/^(host.*)md5$/$1trust/g' $PGHBA
 
+RUN echo "daemon off;" >> /etc/nginx/nginx.conf
+
 RUN apt-get install -y openssh-server
 RUN mkdir /var/run/sshd
 RUN echo 'root:omero' |chpasswd
