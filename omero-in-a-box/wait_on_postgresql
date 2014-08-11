@@ -4,7 +4,7 @@ i="0"
 
 while [ $i -lt 10 ]
 do
-    /usr/lib/postgresql/9.1/bin/pg_ctl -D /var/lib/postgresql/9.1/main status -w 2>/dev/null && exit 0
+    /usr/lib/postgresql/9.1/bin/pg_ctl -D /data/postgresql status -w 2>/dev/null && exit 0
     echo "waiting on postgresql..."
     sleep 1
     i=$[$i+1]
