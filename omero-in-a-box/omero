@@ -9,39 +9,25 @@ set -x
 export OMERO_HOME=/opt/omero
 export PATH=$OMERO_HOME/bin:$PATH
 
-mkdir -p /data/OMERO
-chown omero:omero /data/OMERO
 
-if [ ! -d /opt/omero ]
-then
-    cd /tmp
-    /home/omero/venv/bin/omego download server --branch=OMERO-5.0-latest-build --labels ICE=3.4
-    rm OMERO.server*zip
-    chown -R omero:omero OMERO.server*
-    mv OMERO.server* /opt/
-    ln -s /opt/OMERO.server* /opt/omero
-fi
+i="0"
 
-rm -rf /opt/omero/var
-mkdir -p /opt/omero/var
-mkdir -p /opt/omero/var/master
-mkdir -p /opt/omero/var/registry
-
-mkdir -p /data/logs
-chown -R omero:omero /data/logs
-chown -R omero:omero /opt/omero/var/
-
-ln -s /data/logs /opt/omero/var/log
+while [ $i -lt 10 ]
+do
+    [ -d /opt/omero/var ] && sleep 2 && break
+    sleep 2
+    i=$[$i+1]
+done
 
 cd /opt/omero
-su omero -c 'bin/omero config set omero.db.poolsize 50'
-su omero -c 'bin/omero admin memory || echo possibly old release'
+bin/omero config set omero.db.poolsize 50
+bin/omero admin jvmcfg || echo jvmcfg not available
 
 /wait_on_postgresql # Until we have supervisord events
 
-su omero -c 'psql -hlocalhost -Uomero omero -c "select * from dbpatch"' || {
-    su omero -c 'createdb omero'
-    su omero -c 'bin/omero db script "" "" ome -f- | psql -hlocalhost -Uomero omero'
+psql -hlocalhost -Uomero omero -c "select * from dbpatch" < /dev/null || {
+    createdb omero
+    bin/omero db script "" "" ome -f- | psql -hlocalhost -Uomero omero
 }
 
-exec su omero -c 'icegridnode --nochdir --Ice.Config=etc/internal.cfg,etc/master.cfg --deploy etc/grid/default.xml'
+exec icegridnode --nochdir --Ice.Config=etc/internal.cfg,etc/master.cfg --deploy etc/grid/default.xml
