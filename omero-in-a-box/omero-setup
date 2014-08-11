@@ -8,6 +8,7 @@ set -x
 
 export OMERO_HOME=/opt/omero
 export PATH=$OMERO_HOME/bin:$PATH
+BRANCH=OMERO-5.0-latest
 
 mkdir -p /data/OMERO
 chown omero:omero /data/OMERO
@@ -15,7 +16,7 @@ chown omero:omero /data/OMERO
 if [ ! -d /opt/omero ]
 then
     cd /tmp
-    /home/omero/venv/bin/omego download server --branch=OMERO-5.0-latest-build --labels ICE=3.4
+    /home/omero/venv/bin/omego download server --branch=$BRANCH --labels ICE=3.4
     rm OMERO.server*zip
     chown -R omero:omero OMERO.server*
     mv OMERO.server* /opt/
