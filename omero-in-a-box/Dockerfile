@@ -29,7 +29,9 @@ ADD ./supervisord.conf /etc/supervisor/
 ADD ./supervisord /supervisord
 ADD ./nginx /nginx
 ADD ./omero /omero
+ADD ./omero-setup /omero-setup
 ADD ./postgresql /postgresql
+ADD ./postgresql-setup /postgresql-setup
 ADD ./web /web
 ADD ./wait_on_postgresql /wait_on_postgresql
 ADD ./wait_on_omero /wait_on_omero
