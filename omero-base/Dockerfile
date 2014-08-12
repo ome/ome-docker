@@ -7,6 +7,7 @@ RUN apt-get install -y \
     postgresql-client-9.1 \
     python-imaging \
     python-numpy \
+    python-tables \
     python-virtualenv \
     sudo \
     supervisor \
