@@ -24,14 +24,13 @@ RUN pip install sphinx pillow numexpr==1.4.2 && \
 	pip install tables==2.4.0
 
 # Python 2.7: Use latest released versions with the following exceptions:
-# - There's a change in Cython==0.21 which causes it to fail with tables==3.1.1, so use GitHub until the next release
 # - matplotlib>=1.4.0 requires a more recent version of freetype than the distro version, but 1.3.1 uses a deprecated numpy API, so use the 1.3.x GitHub branch
 RUN yum install -y python27
 RUN ( source /opt/rh/python27/enable && \
 	curl https://raw.githubusercontent.com/pypa/pip/master/contrib/get-pip.py | python2.7 - && \
 	pip install Cython nose genshi epydoc sphinx pillow numpy scipy && \
 	pip install numexpr && \
-	pip install https://github.com/PyTables/PyTables/archive/develop.zip && \
+	pip install tables && \
 	pip install https://github.com/matplotlib/matplotlib/archive/v1.3.x.zip \
 	)
 
