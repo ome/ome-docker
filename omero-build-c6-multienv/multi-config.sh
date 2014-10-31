@@ -32,7 +32,7 @@ delete_path() {
     DEL="$2"
     eval CURRENT="\"\$$VAR\""
     ESCDEL="${DEL//\//\\/}"
-    eval $VAR="\"${CURRENT//$ESCDEL:}\""
+    eval $VAR="\"${CURRENT//$ESCDEL}\""
     eval "EXPORTVARS[$VAR]=\"$(eval 'echo "\$$VAR"')\""
 }
 
