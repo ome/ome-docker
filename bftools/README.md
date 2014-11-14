@@ -11,5 +11,5 @@ DataViewer, and commercial programs like Matlab.
 # How to use this `Dockerfile`
 
     docker pull openmicroscopy/bftools
-    docker run -v/mydata:/home/bf/data openmicroscopy/bftools
+    docker run -it -v /mydata:/home/bf/data openmicroscopy/bftools
     $ showinf data/somefile.ome.tiff
