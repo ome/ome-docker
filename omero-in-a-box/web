@@ -10,10 +10,10 @@ set -x
 /wait_on_omero
 
 cd /opt/omero
-su omero -c 'bin/omero web syncmedia'
+bin/omero web syncmedia
 
 cd lib/python/omeroweb
 export PYTHONPATH=.:/opt/omero/lib/python
-exec su omero -c 'python manage.py runfcgi workdir=./ method=prefork host=0.0.0.0 port=4080 \
+exec python manage.py runfcgi workdir=./ method=prefork host=0.0.0.0 port=4080 \
     pidfile=/opt/omero/var/django.pid daemonize=false \
-    maxchildren=5 minspare=1 maxspare=5 maxrequests=400'
+    maxchildren=5 minspare=1 maxspare=5 maxrequests=400
