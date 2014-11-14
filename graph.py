@@ -25,12 +25,13 @@ between the Dockerfiles (and their dependencies) in
 this repository.
 """
 
-from sys import argv
+from sys import argv, exit
 from os import environ
 from glob import glob
 
 
 prefix = environ.get("PREFIX", "omedocker")
+tag = environ.get("TAG", None)
 
 
 def load_graph():
@@ -44,6 +45,8 @@ def load_graph():
                     source = line[5:]
                     target = dfile.split("/")[0]
                     target = "%s/%s" % (prefix, target)
+                    if tag:
+                        target += ':%s' % tag
                     try:
                         graph[source].append(target)
                     except KeyError:
@@ -94,7 +97,10 @@ if __name__ == "__main__":
     g = load_graph()
     if len(argv) == 1:
         print_dot(g)
-    elif "--order":
+    elif len(argv) == 2 and argv[1] == "--order":
         for val, deps in topo_sort(g):
             if val.startswith(prefix):
                 print val[len(prefix)+1:],
+    else:
+        print "Invalid arguments"
+        exit(1)
