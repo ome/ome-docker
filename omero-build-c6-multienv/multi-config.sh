@@ -27,6 +27,15 @@ prepend_path() {
     eval "EXPORTVARS[$VAR]=\"$(eval 'echo "\$$VAR"')\""
 }
 
+delete_path() {
+    VAR="$1"
+    DEL="$2"
+    eval CURRENT="\"\$$VAR\""
+    ESCDEL="${DEL//\//\\/}"
+    eval $VAR="\"${CURRENT//$ESCDEL}\""
+    eval "EXPORTVARS[$VAR]=\"$(eval 'echo "\$$VAR"')\""
+}
+
 omero_env() {
     # Remove - and . when matching
     IV="${1//[-.]/}"
@@ -102,7 +111,8 @@ if [ -n "$PYTHON_VERSION" ]; then
         prepend_path PATH /opt/rh/python27/root/usr/bin
         prepend_path LD_LIBRARY_PATH /opt/rh/python27/root/usr/lib64
     else
-        prepend_path PATH "/usr/bin"
+        delete_path PATH /opt/rh/python27/root/usr/bin
+        delete_path LD_LIBRARY_PATH /opt/rh/python27/root/usr/lib64
     fi
 fi
 
