@@ -30,7 +30,7 @@ from os import environ
 from glob import glob
 
 
-prefix = environ.get("PREFIX", "omedocker")
+prefix = environ.get("PREFIX", "openmicroscopy")
 tag = environ.get("TAG", None)
 
 
