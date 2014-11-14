@@ -34,8 +34,4 @@ ADD ./wait_on_omero /wait_on_omero
 
 EXPOSE 22 80 4064 4064 5432
 
-# Keep upstart from complaining
-RUN dpkg-divert --local --rename --add /sbin/initctl
-RUN ln -s /bin/true /sbin/initctl
-
 CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]

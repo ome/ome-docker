@@ -1,7 +1,7 @@
-FROM felix/openjdk
+FROM ubuntu:12.04
 MAINTAINER ome-devel@lists.openmicroscopy.org.uk
 
-RUN apt-get install -y bzip2 unzip wget
+RUN apt-get update && apt-get install -y bzip2 unzip wget openjdk-7-jre-headless
 
 RUN useradd -m omero
 
