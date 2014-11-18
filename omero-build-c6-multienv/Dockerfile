@@ -31,7 +31,7 @@ RUN ( source /opt/rh/python27/enable && \
 	pip install Cython nose genshi epydoc sphinx pillow numpy scipy && \
 	pip install numexpr && \
 	pip install tables && \
-	pip install https://github.com/matplotlib/matplotlib/archive/v1.3.x.zip \
+	pip install https://github.com/matplotlib/matplotlib/archive/v1.4.x.zip \
 	)
 
 WORKDIR /opt
