@@ -15,7 +15,6 @@ RUN yum install -y unzip supervisor \
 
 RUN mkdir /home/tarantula
 ADD mysql-preinstall.sql /home/tarantula/
-ADD mysql-postinstall.sql /home/tarantula/
 ADD apache-tarantula.conf /home/tarantula/
 ADD database.yml /home/tarantula/
 ADD configure-tarantula /home/tarantula/
@@ -56,7 +55,6 @@ RUN /etc/init.d/mysqld start && \
 	bash -lc "source /usr/local/rvm/scripts/rvm && \
 	cat /home/tarantula/configure-tarantula | \
 		RAILS_ENV=production rake tarantula:install" && \
-	mysql < /home/tarantula/mysql-postinstall.sql && \
 	/etc/init.d/mysqld stop
 
 EXPOSE 80
