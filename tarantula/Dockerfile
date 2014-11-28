@@ -30,11 +30,9 @@ RUN cd rails && \
 	rm -rf attachment_files log tmp && \
 	ln -s /data/attachment_files /data/log /data/tmp . && \
 	touch log/production.log && \
-	bash -lc "source /usr/local/rvm/scripts/rvm && \
-		bundle install --deployment"
+	bash -lc "bundle install --deployment"
 
-RUN bash -lc "source /usr/local/rvm/scripts/rvm && \
-	gem install passenger && \
+RUN bash -lc "gem install passenger && \
 	passenger-install-apache2-module -a && \
 	passenger-install-apache2-module --snippet > \
 		/etc/httpd/conf.d/tarantula.conf && \
@@ -51,8 +49,7 @@ WORKDIR /opt/tarantula/rails
 RUN /etc/init.d/mysqld start && \
 	mysql < /opt/tarantula/mysql-preinstall.sql && \
 	mv /opt/tarantula/database.yml config/database.yml && \
-	bash -lc "source /usr/local/rvm/scripts/rvm && \
-	cat /opt/tarantula/configure-tarantula | \
+	bash -lc "cat /opt/tarantula/configure-tarantula | \
 		RAILS_ENV=production rake tarantula:install" && \
 	/etc/init.d/mysqld stop
 
