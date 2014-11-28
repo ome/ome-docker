@@ -55,6 +55,8 @@ RUN /etc/init.d/mysqld start && \
 
 RUN cp /opt/tarantula/rails/config/crontab /etc/cron.d/tarantula
 
+VOLUME ["/data", "/var/lib/mysql"]
+
 EXPOSE 80
 CMD ["/usr/bin/supervisord"]
 
