@@ -14,7 +14,10 @@ RUN yum install -y unzip supervisor \
 	curl-devel httpd-devel apr-devel apr-util-devel
 
 RUN mkdir /home/tarantula
+ADD mysql-preinstall.sql /home/tarantula/
+ADD mysql-postinstall.sql /home/tarantula/
 ADD apache-tarantula.conf /home/tarantula/
+ADD database.yml /home/tarantula/
 ADD configure-tarantula /home/tarantula/
 ADD https://github.com/prove/tarantula/archive/$TARANTULA_VERSION.zip /home/tarantula/
 ADD supervisord.conf /etc/supervisord.conf
@@ -48,9 +51,12 @@ RUN chmod a+rx /home/tarantula && \
 
 WORKDIR /home/tarantula/rails
 RUN /etc/init.d/mysqld start && \
+	mysql < /home/tarantula/mysql-preinstall.sql && \
+	mv /home/tarantula/database.yml config/database.yml && \
 	bash -lc "source /usr/local/rvm/scripts/rvm && \
 	cat /home/tarantula/configure-tarantula | \
 		RAILS_ENV=production rake tarantula:install" && \
+	mysql < /home/tarantula/mysql-postinstall.sql && \
 	/etc/init.d/mysqld stop
 
 EXPOSE 80
