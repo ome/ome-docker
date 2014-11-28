@@ -9,7 +9,7 @@ ENV TARANTULA_VERSION 2014.26.1
 # Requirements for bundle install
 # Requirements for compiling passenger
 RUN yum install -y unzip supervisor \
-	mysql-server httpd \
+	mysql-server httpd cronie \
 	libxml2-devel mysql-devel \
 	curl-devel httpd-devel apr-devel apr-util-devel
 
@@ -55,6 +55,8 @@ RUN /etc/init.d/mysqld start && \
 	cat /opt/tarantula/configure-tarantula | \
 		RAILS_ENV=production rake tarantula:install" && \
 	/etc/init.d/mysqld stop
+
+RUN cp /opt/tarantula/rails/config/crontab /etc/cron.d/tarantula
 
 EXPOSE 80
 CMD ["/usr/bin/supervisord"]
