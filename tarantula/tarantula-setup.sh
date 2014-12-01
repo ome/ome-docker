@@ -25,3 +25,6 @@ EOF
         	RAILS_ENV=production rake tarantula:install
 fi
 
+# Start the delayed work job
+RAILS_ENV=production exec bundle exec rake tarantula:jobs:work
+
