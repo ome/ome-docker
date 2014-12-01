@@ -22,7 +22,7 @@ RUN yum install -y unzip supervisor \
 	ln -s /data/mysql/mysql.sock /var/lib/mysql/
 
 RUN mkdir -p /opt/tarantula \
-	/data/attachment_files /data/log /data/tmp /data/mysql
+	/data/attachment_files /data/log /data/tmp /data/mysql /data/supervisor
 ADD mysql-setup.sh /opt/tarantula/
 ADD tarantula-setup.sh /opt/tarantula/
 ADD apache-tarantula.conf /opt/tarantula/
@@ -58,5 +58,5 @@ RUN chown -R apache:apache rails/config.ru \
 VOLUME ["/data"]
 
 EXPOSE 80
-CMD ["/opt/tarantula/run.sh"]
+CMD ["/usr/bin/supervisord"]
 
