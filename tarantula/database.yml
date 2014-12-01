@@ -11,11 +11,6 @@
 #
 # And be sure to use new-style password hashing:
 #   http://dev.mysql.com/doc/refman/5.0/en/old-client.html
-<% get_socket = lambda{ ["/opt/local/var/run/mysql5/mysqld.sock",
-                         "/opt/lampp/var/mysql/mysql.sock",
-                         "/var/run/mysqld/mysqld.sock",
-                         "/var/lib/mysql/mysql.sock"].\
-                        detect{|p| File.exists?(p)} } %>
 
 production:
   adapter: mysql2
@@ -24,4 +19,4 @@ production:
   password: tarantula
   host: localhost
   encoding: utf8
-  socket: <%= get_socket.call %>
+  socket: /data/mysql/mysql.sock
