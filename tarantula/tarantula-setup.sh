@@ -1,12 +1,15 @@
 #!/bin/sh
 
+cd /opt/tarantula/rails
+cp /opt/tarantula/database.yml config/database.yml
+
 mysql -utarantula -ptarantula tarantula -e 'SHOW TABLES'
 RET=$?
-
-set -e
 if [ $RET -ne 0 ]; then
-echo 'Initialising database'
-cat << EOF | mysql
+	set -e
+
+	echo 'Initialising database'
+	cat << EOF | mysql
 DELETE FROM mysql.user WHERE host NOT IN ('localhost', '127.0.0.1') OR user = '';
 DELETE FROM mysql.db WHERE db LIKE 'test%';
 -- Tarantula install will create a database, so just grant privileges
@@ -16,12 +19,9 @@ GRANT SUPER ON *.* TO 'tarantula'@'localhost';
 SET PASSWORD FOR 'root'@'localhost' = PASSWORD('root_password');
 SET PASSWORD FOR 'root'@'127.0.0.1' = PASSWORD('root_password');
 EOF
+
+	echo 'Installing Tarantula'
+	echo -e "$URL\n$EMAIL\n$SMTP_HOST\n$SMTP_PORT\n$SMTP_DOMAIN" | \
+        	RAILS_ENV=production rake tarantula:install
 fi
-
-cd /opt/tarantula/rails
-
-cp /opt/tarantula/database.yml config/database.yml
-
-echo -e "$URL\n$EMAIL\n$SMTP_HOST\n$SMTP_PORT\n$SMTP_DOMAIN" | \
-        RAILS_ENV=production rake tarantula:install
 
