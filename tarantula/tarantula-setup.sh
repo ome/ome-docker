@@ -1,13 +1,17 @@
 #!/bin/sh
 
+export RAILS_ENV=production
 cd /opt/tarantula/rails
 cp /opt/tarantula/database.yml config/database.yml
 
 mysql -utarantula -ptarantula tarantula -e 'SHOW TABLES'
 RET=$?
-if [ $RET -ne 0 ]; then
-	set -e
+set -e
 
+if [ $RET -eq 0 ]; then
+	echo 'Database found'
+	rake assets:precompile
+else
 	echo 'Initialising database'
 	cat << EOF | mysql
 DELETE FROM mysql.user WHERE host NOT IN ('localhost', '127.0.0.1') OR user = '';
@@ -22,9 +26,7 @@ EOF
 
 	echo 'Installing Tarantula'
 	echo -e "$URL\n$EMAIL\n$SMTP_HOST\n$SMTP_PORT\n$SMTP_DOMAIN" | \
-        	RAILS_ENV=production rake tarantula:install
+		rake tarantula:install
 fi
 
-# Start the delayed work job
-RAILS_ENV=production exec bundle exec rake tarantula:jobs:work
-
+exec bundle exec rake tarantula:jobs:work
