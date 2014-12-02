@@ -1,8 +1,13 @@
-#!/bin/sh
+#!/bin/bash
+
+source /usr/local/rvm/scripts/rvm
 
 export RAILS_ENV=production
 cd /opt/tarantula/rails
 cp /opt/tarantula/database.yml config/database.yml
+
+# Give MySQL time to start
+sleep 5
 
 mysql -utarantula -ptarantula tarantula -e 'SHOW TABLES'
 RET=$?
@@ -10,6 +15,7 @@ set -e
 
 if [ $RET -eq 0 ]; then
 	echo 'Database found'
+	echo 'Precompiling Tarantula'
 	rake assets:precompile
 else
 	echo 'Initialising database'
@@ -29,4 +35,9 @@ EOF
 		rake tarantula:install
 fi
 
-exec bundle exec rake tarantula:jobs:work
+# Restart Apache
+echo 'Restarting Apache'
+pkill httpd
+
+echo 'Starting tarantula delayed_job'
+exec rake tarantula:jobs:work
