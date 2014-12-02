@@ -15,7 +15,7 @@ ENV SMTP_DOMAIN localhost
 # Requirements for bundle install
 # Requirements for compiling passenger
 RUN yum install -y unzip supervisor \
-	mysql-server httpd cronie \
+	mysql-server httpd memcached cronie \
 	libxml2-devel mysql-devel \
 	curl-devel httpd-devel apr-devel apr-util-devel && \
 	sed -i.bak 's/\/var\/lib\/mysql/\/data\/mysql/' /etc/my.cnf && \
