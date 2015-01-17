@@ -5,8 +5,8 @@ OMERO?=/tmp/omero
 DATA?=/tmp/data
 
 # Images
-D?=omedocker/data
-I?=omedocker/omero-in-a-box
+D?=openmicroscopy/data
+I?=openmicroscopy/omero-in-a-box
 
 # Named containers
 C?=data-in-a-box
@@ -27,10 +27,10 @@ nomounts:
 	$(DOCKER) run --rm -i $(I)
 
 lowmem:
-	$(DOCKER) run --rm -i -v $(OMERO):/opt/omero -m=10000000      omedocker/omero-in-a-box
+	$(DOCKER) run --rm -i -v $(OMERO):/opt/omero -m=10000000      openmicroscopy/omero-in-a-box
 
 build:
-	$(DOCKER) build -t omedocker/omero-in-a-box .
+	$(DOCKER) build -t openmicroscopy/omero-in-a-box .
 
 data:
 	$(DOCKER) run --name $(C) $(D) mkdir /data/supervisor
