@@ -1,7 +1,10 @@
 FROM ubuntu:12.04
 MAINTAINER ome-devel@lists.openmicroscopy.org.uk
 
-RUN apt-get update && apt-get install -y bzip2 unzip wget openjdk-7-jre-headless
+RUN apt-get update && \
+    apt-get install -y bzip2 unzip wget openjdk-7-jre-headless \
+                       make g++ patch \
+                       libmcpp-dev libbz2-dev libexpat1-dev libssl-dev libdb5.1++-dev
 
 RUN useradd -m omero
 
@@ -14,14 +17,11 @@ RUN /opt/anaconda/bin/conda install --yes numpy && \
     /opt/anaconda/bin/conda install --yes scipy && \
     /opt/anaconda/bin/conda install --yes matplotlib && \
     /opt/anaconda/bin/conda install --yes ipython && \
-    /opt/anaconda/bin/conda install --yes pytables
+    /opt/anaconda/bin/conda install --yes pytables && \
+    /opt/anaconda/bin/conda install --yes pip
 
 RUN echo 'export PATH=/opt/anaconda/bin:$PATH' >> .bashrc
 
-RUN apt-get install -y make g++
-RUN apt-get install -y libmcpp-dev libbz2-dev libexpat1-dev libssl-dev libdb5.1++-dev
-
-RUN apt-get install -y patch
 ADD Makefile.patch /tmp/
 ADD ice-build /tmp/ice-build
 RUN sh /tmp/ice-build && rm /tmp/ice-build

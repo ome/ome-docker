@@ -18,6 +18,7 @@ RUN apt-get install -y \
 RUN useradd -m omero
 RUN su - omero -c "virtualenv --system-site-packages ~/venv"
 RUN su - omero -c "~/venv/bin/pip install -U yaclifw && ~/venv/bin/pip install -U omego"
+RUN apt-get install -y git
 
 USER omero
 ENV HOME /home/omero
