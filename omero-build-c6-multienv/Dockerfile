@@ -28,10 +28,15 @@ RUN pip install sphinx pillow numexpr==1.4.2 && \
 RUN yum install -y python27
 RUN ( source /opt/rh/python27/enable && \
 	curl https://raw.githubusercontent.com/pypa/pip/master/contrib/get-pip.py | python2.7 - && \
-	pip install Cython nose genshi epydoc sphinx pillow numpy scipy && \
+	yum install -y python27-scipy python27-numpy && \
+	pip install Cython nose genshi epydoc sphinx pillow && \
 	pip install numexpr && \
-	pip install tables && \
-	pip install https://github.com/matplotlib/matplotlib/archive/v1.4.x.zip \
+	pip install tables \
+	)
+# Run as a separate layer since it seems to frequently change
+RUN ( source /opt/rh/python27/enable && \
+	pip install -U six && \
+	pip install matplotlib \
 	)
 
 WORKDIR /opt
