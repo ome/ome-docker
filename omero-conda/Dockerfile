@@ -1,7 +1,13 @@
 FROM ubuntu:12.04
 MAINTAINER ome-devel@lists.openmicroscopy.org.uk
 
-RUN apt-get update && apt-get install -y bzip2 unzip wget openjdk-7-jre-headless
+RUN apt-get update && \
+    apt-get install -y \
+        bzip2 \
+        unzip \
+        wget \
+        postgresql-client-9.1 \
+        openjdk-7-jdk-headless
 
 RUN useradd -m omero
 
@@ -14,7 +20,8 @@ RUN /opt/anaconda/bin/conda install --yes numpy && \
     /opt/anaconda/bin/conda install --yes scipy && \
     /opt/anaconda/bin/conda install --yes matplotlib && \
     /opt/anaconda/bin/conda install --yes ipython && \
-    /opt/anaconda/bin/conda install --yes pytables
+    /opt/anaconda/bin/conda install --yes pytables && \
+    /opt/anaconda/bin/conda install --yes omego
 
 RUN echo 'export PATH=/opt/anaconda/bin:$PATH' >> .bashrc
 

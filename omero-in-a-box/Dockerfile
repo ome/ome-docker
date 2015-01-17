@@ -1,9 +1,9 @@
-FROM openmicroscopy/omero-base
+FROM openmicroscopy/omero-conda
 MAINTAINER ome-devel@lists.openmicroscopy.org.uk
 
 USER root
 
-RUN apt-get install -y nginx postgresql postgresql-contrib supervisor
+RUN apt-get install -y nginx postgresql postgresql-contrib supervisor sudo vim
 
 RUN mkdir -p /data/supervisor
 RUN mkdir -p /data/OMERO

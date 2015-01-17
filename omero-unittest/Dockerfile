@@ -4,7 +4,6 @@ MAINTAINER ome-devel@lists.openmicroscopy.org.uk
 USER root
 RUN /opt/anaconda/bin/conda install --yes flake8
 RUN apt-get install -y git
-RUN apt-get install -y --no-install-recommends openjdk-7-jdk
 RUN /opt/anaconda/bin/conda install --yes pip
 RUN /opt/anaconda/bin/pip install genshi
 RUN /opt/anaconda/bin/pip install pytest

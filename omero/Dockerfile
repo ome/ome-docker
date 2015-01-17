@@ -1,4 +1,4 @@
-FROM openmicroscopy/openjdk-ice34
+FROM openmicroscopy/omero-conda
 MAINTAINER ome-devel@lists.openmicroscopy.org.uk
 
 ENV BRANCH OMERO-5.0-merge-build
