@@ -10,8 +10,8 @@ RUN mkdir -p /data/OMERO
 RUN chown omero /data/OMERO
 RUN ln -s /data/OMERO /OMERO
 
-ENV PGVER 9.1
-ENV PGETC /etc/postgresql/9.1/
+ENV PGVER 9.3
+ENV PGETC /etc/postgresql/9.3/
 ENV PGCONF $PGETC/postgresql.conf
 ENV PGHBA  $PGETC/pg_hba.conf
 ENV PGEXEC /usr/lib/postgresql/$PGVER/bin
