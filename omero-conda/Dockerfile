@@ -5,7 +5,7 @@ RUN apt-get install -y --no-install-recommends \
         bzip2 \
         unzip \
         wget \
-        postgresql-client-9.3 \
+        postgresql-client \
         openjdk-7-jdk
 
 RUN useradd -m omero
