@@ -1,12 +1,11 @@
 FROM ubuntu:14.04
 MAINTAINER ome-devel@lists.openmicroscopy.org.uk
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
+RUN apt-get install -y --no-install-recommends \
         bzip2 \
         unzip \
         wget \
-        postgresql-client-9.1 \
+        postgresql-client-9.3 \
         openjdk-7-jdk
 
 RUN useradd -m omero
