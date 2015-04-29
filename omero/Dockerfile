@@ -1,20 +1,22 @@
-FROM openmicroscopy/openjdk-ice34
+FROM openmicroscopy/omero-conda
 MAINTAINER ome-devel@lists.openmicroscopy.org.uk
 
 ENV BRANCH OMERO-5.0-merge-build
 
-RUN useradd -m omero
+USER root
 RUN mkdir /OMERO
 RUN chown omero /OMERO
 RUN echo omero.data.dir=/home/omero/OMERO-DATA >> /tmp/settings
 RUN apt-get install -y python-virtualenv wget unzip
-RUN su - omero -c "virtualenv --system-site-packages ~/venv"
-RUN su - omero -c "~/venv/bin/pip install omego"
-RUN su - omero -c "~/venv/bin/omego download --branch=$BRANCH server --labels ICE=3.4"
-RUN su - omero -c "rm OMERO.server*zip"
-RUN su - omero -c "ln -s OMERO.server* OMERO-CURRENT"
-RUN su - omero -c "~/OMERO-CURRENT/bin/omero config load /tmp/settings"
-RUN su - omero -c "mkdir ~/OMERO-DATA"
+
+USER omero
+RUN virtualenv --system-site-packages ~/venv
+RUN ~/venv/bin/pip install omego
+RUN ~/venv/bin/omego download --branch=$BRANCH server --labels ICE=3.5
+RUN rm OMERO.server*zip
+RUN ln -s OMERO.server* OMERO-CURRENT
+RUN (/opt/anaconda/bin/python ~/OMERO-CURRENT/bin/omero config load /tmp/settings)
+RUN mkdir ~/OMERO-DATA
 
 RUN echo 'cd /home/omero/OMERO-CURRENT' >> /home/omero/start.sh
 RUN echo 'bin/omero config set omero.db.host $PG_PORT_5432_TCP_ADDR' >> /home/omero/start.sh
@@ -32,8 +34,6 @@ RUN echo 'bin/omero db script "" "" "$PASSWORD" -f /data/init_db.sql' >> /home/o
 RUN echo 'createuser -h "$HOST" -p "$PORT" -U postgres -s omero' >> /home/omero/init.sh
 RUN echo 'createdb -h "$HOST" -p "$PORT" -O omero omero' >> /home/omero/init.sh
 RUN echo 'psql -h "$HOST" -p "$PORT" -U omero omero -f /data/init_db.sql' >> /home/omero/init.sh
-
-RUN apt-get install -y postgresql-client-9.1
 
 USER omero
 ENV HOME /home/omero

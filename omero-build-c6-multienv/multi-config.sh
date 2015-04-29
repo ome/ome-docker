@@ -56,6 +56,10 @@ omero_env() {
             ICE_VERSION=3.5.1
             ;;
 
+        ice36 | ice36b )
+            ICE_VERSION=3.6b
+            ;;
+
         java6 )
             JAVA_VERSION=1.6.0
             ;;

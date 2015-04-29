@@ -1,20 +1,22 @@
-FROM ubuntu:12.04
+FROM ubuntu:14.04
 MAINTAINER ome-devel@lists.openmicroscopy.org.uk
 
-RUN apt-get update && apt-get install -y bzip2 unzip wget openjdk-7-jre-headless
+RUN apt-get install -y --no-install-recommends \
+        bzip2 \
+        unzip \
+        wget \
+        postgresql-client \
+        openjdk-7-jdk
 
 RUN useradd -m omero
 
 RUN cd /tmp && \
-    wget http://repo.continuum.io/miniconda/Miniconda-3.4.2-Linux-x86_64.sh && \
-    /bin/bash Miniconda-3.4.2-Linux-x86_64.sh -b -p /opt/anaconda && \
-    rm Miniconda-3.4.2-Linux-x86_64.sh
+    wget http://repo.continuum.io/miniconda/Miniconda-3.7.0-Linux-x86_64.sh && \
+    /bin/bash Miniconda-3.7.0-Linux-x86_64.sh -b -p /opt/anaconda && \
+    rm Miniconda-3.7.0-Linux-x86_64.sh
 
-RUN /opt/anaconda/bin/conda install --yes numpy && \
-    /opt/anaconda/bin/conda install --yes scipy && \
-    /opt/anaconda/bin/conda install --yes matplotlib && \
-    /opt/anaconda/bin/conda install --yes ipython && \
-    /opt/anaconda/bin/conda install --yes pytables
+RUN /opt/anaconda/bin/conda install --yes \
+    numpy scipy matplotlib ipython pytables pip
 
 RUN echo 'export PATH=/opt/anaconda/bin:$PATH' >> .bashrc
 

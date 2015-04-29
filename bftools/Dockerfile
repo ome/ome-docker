@@ -1,4 +1,4 @@
-FROM openmicroscopy/openjdk-ice34
+FROM java:7
 MAINTAINER ome-devel@lists.openmicroscopy.org.uk
 
 RUN apt-get install -y curl
