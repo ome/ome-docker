@@ -6,7 +6,7 @@ BASES=$(grep -h '^FROM' */Dockerfile | \
 echo Pulling $BASES
 for base in $BASES
 do
-    docker pull $base
+    docker pull $base || true
 done
 
 for docker in $(python graph.py --order)
