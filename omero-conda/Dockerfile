@@ -1,7 +1,8 @@
 FROM ubuntu:14.04
 MAINTAINER ome-devel@lists.openmicroscopy.org.uk
 
-RUN apt-get install -y --no-install-recommends \
+RUN apt-get update -y && \
+        apt-get install -y --no-install-recommends \
         bzip2 \
         unzip \
         wget \
