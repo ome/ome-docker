@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# Setup and run omero
+
+set -eux
+
+OPTS="${OMERO_SERVER_ZIP:-} $@"
+
+while ! psql -Uomero -l > /dev/null; do
+    echo 'Waiting for postgres'
+    sleep 5
+done
+
+#echo "CREATE USER omero PASSWORD 'omero'" | su - omero -c psql
+su - omero -c "createdb -E UTF8 -O omero omero"
+su - omero -c "psql -c \"ALTER ROLE omero WITH PASSWORD 'omero'\""
+
+if [ ! -d /OMERO ]; then
+    echo "Creating omero data directory"
+    mkdir -p /data/OMERO
+    chown -R omero /data/OMERO
+    ln -s /data/OMERO /OMERO
+fi
+
+su - omero -c \
+    "omego install --initdb --dbname omero --sym OMERO.server $OPTS"
+
+OMERO=~omero/OMERO.server/bin/omero
+su - omero -c "$OMERO web config nginx" > /etc/nginx/conf.d/omero-web.conf
+
+supervisorctl restart nginx
