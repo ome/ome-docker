@@ -31,6 +31,7 @@ ADD ./omero-setup /omero-setup
 RUN ln -s /opt/Ice-3.5/bin/* /usr/local/bin/ && \
     ln -s /opt/anaconda/bin/* /usr/local/bin/
 
+VOLUME ["/data"]
 EXPOSE 22 80 4063 4064 5432
 
 CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
