@@ -24,9 +24,10 @@ RUN echo "daemon off;" >> /etc/nginx/nginx.conf && \
     rm /etc/nginx/sites-enabled/*
 RUN echo "omero ALL= (ALL) NOPASSWD: ALL" >> /etc/sudoers.d/omero
 
-ADD ./supervisord.conf /etc/supervisor/conf.d/omero.conf
+ADD supervisord/*.conf /etc/supervisor/conf.d/
 ADD ./postgresql /postgresql
 ADD ./omero-setup /omero-setup
+ADD ./run.sh /run.sh
 
 RUN ln -s /opt/Ice-3.5/bin/* /usr/local/bin/ && \
     ln -s /opt/anaconda/bin/* /usr/local/bin/
@@ -34,4 +35,6 @@ RUN ln -s /opt/Ice-3.5/bin/* /usr/local/bin/ && \
 VOLUME ["/data"]
 EXPOSE 22 80 4063 4064 5432
 
-CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
+ENTRYPOINT ["/run.sh"]
+# Todo: Change omego to download the latest release automatically
+CMD ["https://downloads.openmicroscopy.org/omero/5.1.1/artifacts/OMERO.server-5.1.1-ice35-b43.zip"]
