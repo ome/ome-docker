@@ -9,7 +9,7 @@ To download, install and run the default server:
 
 [omego](https://github.com/ome/omego/) is used to download and install the server when the image is started. Command arguments are appended to the `omego` command line. For example, the URL to an alternative OMERO.server zip can be passed:
 
-    docker run -d -P omero-deploy https://downloads.openmicroscopy.org/omero/5.1.0/artifacts/OMERO.server-5.1.0-ice35-b40.zip
+    docker run -d omero-deploy https://downloads.openmicroscopy.org/omero/5.1.0/artifacts/OMERO.server-5.1.0-ice35-b40.zip
 
 A server can also be obtained from the OME's continuous integration server:
 
