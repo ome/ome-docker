@@ -11,24 +11,32 @@ else
 fi
 
 while ! psql -Uomero -l > /dev/null; do
-    echo 'Waiting for postgres'
+    echo "Waiting for postgres"
     sleep 5
 done
 
-su - omero -c "createdb -E UTF8 -O omero omero"
-su - omero -c "psql -c \"ALTER ROLE omero WITH PASSWORD 'omero'\""
+# Create the omero database if it doesn't already exist
+INITDB=
+psql -Uomero omero -c '\conninfo' || {
+    echo "Creating omero database"
+    su - omero -c "createdb -E UTF8 -O omero omero"
+    su - omero -c "psql -c \"ALTER ROLE omero WITH PASSWORD 'omero'\""
+    INITDB=--initdb
+}
 
-if [ ! -d /OMERO ]; then
+if [ ! -d /data/OMERO ]; then
     echo "Creating omero data directory"
     mkdir -p /data/OMERO
     chown -R omero /data/OMERO
-    ln -s /data/OMERO /OMERO
 fi
+ln -s /data/OMERO /OMERO
 
 su - omero -c \
-    "omego install --initdb --dbname omero --sym OMERO.server $OPTS"
+    "omego install $INITDB --dbname omero --sym OMERO.server $OPTS"
 
+echo "Starting omero"
 OMERO=~omero/OMERO.server/bin/omero
 su - omero -c "$OMERO web config nginx" > /etc/nginx/conf.d/omero-web.conf
 
+echo "Restarting nginx"
 supervisorctl restart nginx
