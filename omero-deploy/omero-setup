@@ -29,7 +29,6 @@ if [ ! -d /data/OMERO ]; then
     mkdir -p /data/OMERO
     chown -R omero /data/OMERO
 fi
-ln -s /data/OMERO /OMERO
 
 su - omero -c \
     "omego install $INITDB --dbname omero --sym OMERO.server $OPTS"

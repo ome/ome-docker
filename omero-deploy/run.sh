@@ -9,4 +9,5 @@ else
 	mv /etc/supervisor/conf.d/omero.conf /etc/supervisor/conf.d/omero.disabled
 fi
 
+mkdir -p /data/supervisor
 exec /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf

@@ -24,6 +24,16 @@ RUN echo "daemon off;" >> /etc/nginx/nginx.conf && \
     rm /etc/nginx/sites-enabled/*
 RUN echo "omero ALL= (ALL) NOPASSWD: ALL" >> /etc/sudoers.d/omero
 
+RUN rmdir /var/log/supervisor && \
+    ln -s /data/supervisor /var/log/ && \
+    ln -s /data/OMERO /
+
+# The following isn't needed since /data should either be an existing volume
+# or be created by the startup scripts. However it may be useful if you've
+# overridden entrypoint for testing/debugging
+RUN mkdir -p /data/supervisor /data/OMERO && \
+    chown omero /data/OMERO
+
 ADD supervisord/*.conf /etc/supervisor/conf.d/
 ADD ./postgresql /postgresql
 ADD ./omero-setup /omero-setup
