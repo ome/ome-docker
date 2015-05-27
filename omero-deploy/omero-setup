@@ -30,8 +30,15 @@ if [ ! -d /data/OMERO ]; then
     chown -R omero /data/OMERO
 fi
 
+PRESTART=
+if stat -t /data/omero.preload/* > /dev/null 2>&1; then
+    for f in /data/omero.preload/*; do
+        PRESTART="$PRESTART --prestartfile $f"
+    done
+fi
+
 su - omero -c \
-    "omego install $INITDB --dbname omero --sym OMERO.server $OPTS"
+    "omego install $INITDB --dbname omero --sym OMERO.server $PRESTART $OPTS"
 
 echo "Starting omero"
 OMERO=~omero/OMERO.server/bin/omero
