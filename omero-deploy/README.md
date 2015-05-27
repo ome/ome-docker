@@ -20,7 +20,21 @@ Pass `""` to disable the automatic server installation. This will start all the 
     CID=$(docker run -d omero-deploy "")
     docker exec $CID /omero-setup https://downloads.openmicroscopy.org/omero/5.1.1/artifacts/OMERO.server-5.1.1-ice35-b43.zip
 
-Note: to assist with testing and debugging the image includes:
+
+Data volumes
+------------
+
+`/data` is defined as a volume. The following directories may be used or created:
+- `/data/OMERO`: OMERO data directory
+- `/data/postgresql`: PostgreSQL data directory
+- `/data/supervisor`: Supervisord logs
+- `/data/omero.preload`: Optional scripts to be passed to `bin/omero load ...` before starting the server
+
+
+Notes
+-----
+
+This image is designed for testing and debugging OMERO, and includes:
 - ssh
 - password-less sudo for the `omero` user
 - An exposed PostgreSQL server port
