@@ -33,5 +33,3 @@ USER omero
 ENV HOME /home/omero
 WORKDIR /home/omero
 RUN echo 'export PATH=/opt/anaconda/bin/:$PATH' >> ~/.bashrc
-
-ENTRYPOINT bash

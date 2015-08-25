@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Setup and run PostgreSQL in foreground mode
+
+set -eux
+
+PGVER=$(psql --version | sed -re 's/^.+ ([0-9]\.+[0-9])\.[0-9]$/\1/')
+PGDATA=${PGDATA:-/data/postgresql}
+PGBIN=/usr/lib/postgresql/$PGVER/bin
+
+if [ ! -f "$PGDATA/PG_VERSION" ]; then
+    echo "Initialising PostgreSQL"
+    install -d -m 755 -o omero -g omero "$PGDATA"
+    su - omero -c "$PGBIN/initdb -D $PGDATA -E UTF8"
+    echo sed -i -re 's/^(host.*)trust/\1md5/' "$PGDATA/pg_hba.conf"
+    echo 'host all all 0.0.0.0/0 md5' >> "$PGDATA/pg_hba.conf"
+else
+    chown -R omero "$PGDATA"
+fi
+
+sed -ri "s/^#(listen_addresses\s*=\s*)\S+/\1'*'/" "$PGDATA/postgresql.conf"
+
+chown -R omero /var/run/postgresql
+
+echo "Starting PostgreSQL"
+exec su omero -c "exec $PGBIN/postgres -D $PGDATA"

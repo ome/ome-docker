@@ -1,0 +1,48 @@
+#!/bin/bash
+
+# Setup and run omero
+
+set -eux
+
+if [ $# -eq 0 ]; then
+    OPTS="${OMEGO_ARGS:-}"
+else
+    OPTS="$@"
+fi
+
+while ! psql -Uomero -l > /dev/null; do
+    echo "Waiting for postgres"
+    sleep 5
+done
+
+# Create the omero database if it doesn't already exist
+INITDB=
+psql -Uomero omero -c '\conninfo' || {
+    echo "Creating omero database"
+    su - omero -c "createdb -E UTF8 -O omero omero"
+    su - omero -c "psql -c \"ALTER ROLE omero WITH PASSWORD 'omero'\""
+    INITDB=--initdb
+}
+
+if [ ! -d /data/OMERO ]; then
+    echo "Creating omero data directory"
+    mkdir -p /data/OMERO
+    chown -R omero /data/OMERO
+fi
+
+PRESTART=
+if stat -t /data/omero.preload/* > /dev/null 2>&1; then
+    for f in /data/omero.preload/*; do
+        PRESTART="$PRESTART --prestartfile $f"
+    done
+fi
+
+su - omero -c \
+    "omego install $INITDB --dbname omero --sym OMERO.server $PRESTART $OPTS"
+
+echo "Starting omero"
+OMERO=~omero/OMERO.server/bin/omero
+su - omero -c "$OMERO web config nginx" > /etc/nginx/conf.d/omero-web.conf
+
+echo "Restarting nginx"
+supervisorctl restart nginx
