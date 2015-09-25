@@ -41,7 +41,7 @@ RUN ln -s /opt/Ice-3.5/bin/* /usr/local/bin/ && \
     ln -s /opt/anaconda/bin/* /usr/local/bin/
 
 VOLUME ["/data"]
-EXPOSE 22 80 4063 4064 5432
+EXPOSE 22 80 4063 4064
 
 # Pass a single argument "" to disable OMERO.server installation
 ENTRYPOINT ["/run.sh"]
