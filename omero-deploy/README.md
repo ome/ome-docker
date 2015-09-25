@@ -22,9 +22,14 @@ Pass `""` to disable the automatic server installation. This will start all the 
 Passwords
 ---------
 
-Use the environment variable `OMERO_PASSWORD` to change the omero system password (default unset), and the OMERO.server root password (default `omero`):
+Define the following environment variables to set the initial passwords:
+- `OMERO_PASSWORD`: OMERO.server root password (default `omero`, ignored if an existing OMERO database is being used)
+- `SYSTEM_PASSWORD`: The omero user system password (default unset, must be set to allow ssh login)
 
-    docker run -d -e OMERO_PASSWORD=password omero-deploy
+Example:
+
+    docker run -d -e SYSTEM_PASSWORD=abc -e OMERO_PASSWORD=def omero-deploy
+
 
 Data volumes
 ------------
