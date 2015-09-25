@@ -12,7 +12,6 @@ RUN apt-get update -y && \
     sudo \
     vim
 
-RUN echo 'omero:omero' | chpasswd omero
 RUN /opt/anaconda/bin/pip install omego
 
 RUN mkdir /var/run/sshd && \
