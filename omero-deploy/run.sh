@@ -2,9 +2,13 @@
 
 set -e
 
+if [ -n "$SYSTEM_PASSWORD" ]; then
+	echo "Setting omero system password"
+	echo "omero:$SYSTEM_PASSWORD" | chpasswd
+fi
+
 if [ -n "$OMERO_PASSWORD" ]; then
-	echo "Setting omero password"
-	echo "omero:$OMERO_PASSWORD" | chpasswd
+	echo "Overriding omero root password"
 	OMEGO_ARGS="--rootpass \"$OMERO_PASSWORD\""
 fi
 
