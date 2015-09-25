@@ -8,7 +8,6 @@ RUN apt-get update -y && \
     openssh-server \
     nginx \
     postgresql \
-    python-pip \
     supervisor \
     sudo \
     vim
