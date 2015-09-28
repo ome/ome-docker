@@ -40,6 +40,8 @@ ADD ./run.sh /run.sh
 RUN ln -s /opt/Ice-3.5/bin/* /usr/local/bin/ && \
     ln -s /opt/anaconda/bin/* /usr/local/bin/
 
+RUN chsh -s /bin/bash omero
+
 VOLUME ["/data"]
 EXPOSE 22 80 4063 4064
 
