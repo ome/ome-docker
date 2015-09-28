@@ -8,12 +8,10 @@ RUN apt-get update -y && \
     openssh-server \
     nginx \
     postgresql \
-    python-pip \
     supervisor \
     sudo \
     vim
 
-RUN echo 'omero:omero' | chpasswd omero
 RUN /opt/anaconda/bin/pip install omego
 
 RUN mkdir /var/run/sshd && \
@@ -43,8 +41,8 @@ RUN ln -s /opt/Ice-3.5/bin/* /usr/local/bin/ && \
     ln -s /opt/anaconda/bin/* /usr/local/bin/
 
 VOLUME ["/data"]
-EXPOSE 22 80 4063 4064 5432
+EXPOSE 22 80 4063 4064
 
+# Pass a single argument "" to disable OMERO.server installation
 ENTRYPOINT ["/run.sh"]
-# Todo: Change omego to download the latest release automatically
-CMD ["https://downloads.openmicroscopy.org/omero/5.1.1/artifacts/OMERO.server-5.1.1-ice35-b43.zip"]
+CMD ["--release", "latest"]

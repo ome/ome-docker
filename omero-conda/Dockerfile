@@ -17,7 +17,7 @@ RUN cd /tmp && \
     rm Miniconda-3.7.0-Linux-x86_64.sh
 
 RUN /opt/anaconda/bin/conda install --yes \
-    numpy scipy matplotlib ipython pytables pip
+    numpy scipy matplotlib ipython pytables pillow pip
 
 RUN echo 'export PATH=/opt/anaconda/bin:$PATH' >> .bashrc
 
