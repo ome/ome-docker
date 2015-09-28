@@ -28,7 +28,7 @@ Define the following environment variables to set the initial passwords:
 
 Example:
 
-    docker run -d -e SYSTEM_PASSWORD=abc -e OMERO_PASSWORD=def omero-deploy
+    docker run -d -e SYSTEM_PASSWORD=abc -e OMERO_PASSWORD=def openmicroscopy/omero-deploy
 
 
 Data volumes
