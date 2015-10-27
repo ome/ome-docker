@@ -1,4 +1,4 @@
-FROM centos:centos7
+FROM centos:centos6
 MAINTAINER ome-devel@lists.openmicroscopy.org.uk
 
 RUN yum install -y sudo openssh-server openssh-clients && \
