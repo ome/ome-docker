@@ -16,12 +16,12 @@ while ! psql -Uomero -l > /dev/null; do
 done
 
 # Create the omero database if it doesn't already exist
-INITDB=
+DBCMD=--upgradedb
 psql -Uomero omero -c '\conninfo' || {
     echo "Creating omero database"
     su - omero -c "createdb -E UTF8 -O omero omero"
     su - omero -c "psql -c \"ALTER ROLE omero WITH PASSWORD 'omero'\""
-    INITDB=--initdb
+    DBCMD=--initdb
 }
 
 if [ ! -d /data/OMERO ]; then
@@ -38,7 +38,7 @@ if stat -t /data/omero.preload/* > /dev/null 2>&1; then
 fi
 
 su - omero -c \
-    "omego install $INITDB --dbname omero --sym OMERO.server $PRESTART $OPTS"
+    "omego install $DBCMD --dbname omero --sym OMERO.server $PRESTART $OPTS"
 
 echo "Starting omero"
 OMERO=~omero/OMERO.server/bin/omero
