@@ -4,7 +4,7 @@
 
 set -eux
 
-PGVER=$(psql --version | sed -re 's/^.+ ([0-9]\.+[0-9])\.[0-9]$/\1/')
+PGVER=$(psql --version | awk '{print $NF}' | cut -d '.' -f -2)
 PGDATA=${PGDATA:-/data/postgresql}
 PGBIN=/usr/lib/postgresql/$PGVER/bin
 
