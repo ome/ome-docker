@@ -13,9 +13,10 @@ RUN apt-get update -y && \
     vim
 
 RUN /opt/anaconda/bin/pip install \
-    omego \
     "django<1.9" \
     gunicorn
+RUN /opt/anaconda/bin/pip install \
+    https://github.com/ome/omego/archive/master.zip
 
 RUN mkdir /var/run/sshd && \
     sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' \
