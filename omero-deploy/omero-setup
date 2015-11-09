@@ -37,11 +37,18 @@ if stat -t /data/omero.preload/* > /dev/null 2>&1; then
     done
 fi
 
-su - omero -c \
-    "omego install $DBCMD --dbname omero --sym OMERO.server $PRESTART $OPTS"
-
-echo "Starting omero"
 OMERO=~omero/OMERO.server/bin/omero
+
+if [ -e ~omero/OMERO.server ]; then
+    echo "OMERO.server found, starting existing server"
+    su - omero -c "$OMERO admin start"
+    su - omero -c "$OMERO web start"
+else
+    su - omero -c \
+        "omego install $DBCMD --dbname omero --sym OMERO.server $PRESTART $OPTS"
+fi
+
+echo "Creating web configuration"
 su - omero -c "$OMERO web config nginx" > /etc/nginx/conf.d/omero-web.conf
 
 echo "Restarting nginx"
