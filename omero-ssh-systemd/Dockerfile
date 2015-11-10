@@ -15,7 +15,7 @@ RUN sed -i \
 	/etc/pam.d/sshd
 
 RUN useradd omero && \
-	echo 'omero:omero' | chpasswd omero &&\
+	echo 'omero:omero' | chpasswd && \
 	echo "omero ALL= (ALL) NOPASSWD: ALL" >> /etc/sudoers.d/omero
 
 EXPOSE 22
