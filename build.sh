@@ -2,7 +2,7 @@ set -e
 PREFIX=openmicroscopy
 
 BASES=$(grep -h '^FROM' */Dockerfile | \
-	sed -re 's|FROM\s+([A-Za-z0-9/-]+)(:.+)?|\1|' | sort -u)
+    cut -b6- | sort -u)
 for base in $BASES
 do
     if [ "${base#$PREFIX/}" = "$base" ]; then
