@@ -6,14 +6,15 @@ http://www.openmicroscopy.org/site/support/omero5/sysadmins/grid.html#nodes-on-m
 
 This is a work in progress, for instance data is not stored on persistant volumes.
 
+
+
 To build the Docker images:
 
-    ./build.sh
+    docker build -t omero-grid-omero omero
 
-To run the Docker images
+To run the Docker images start a postgres DB, an OMERO master and OMERO slave
+TODO: The slave is currently broken
 
-    ./run.sh
-
-To delete the runtime images
-
-    ./cleanup.sh
+    docker run -it --rm --name postgres -e POSTGRES_PASSWORD=postgres postgres
+    docker run -it --rm --link postgres:db -e DBUSER=postgres -e DBPASS=postgres -e DBNAME=postgres --name omero-master omero-grid-omero ./run.sh master
+    docker run -it --rm --link omero-master:master omero-grid-omero ./run.sh slave
