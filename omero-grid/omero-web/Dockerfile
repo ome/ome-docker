@@ -30,8 +30,6 @@ RUN omego download python --release $OMERO_VERSION && \
     ln -s OMERO.py-*/ OMERO.py
 
 RUN mkdir -p var/run var/log/nginx
-RUN OMERO.py/bin/omero web config --http 8080 nginx > \
-    /etc/nginx/conf.d/nginx.conf
 
 ADD run.sh /home/omero/
 

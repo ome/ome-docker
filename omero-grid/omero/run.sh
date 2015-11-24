@@ -40,6 +40,14 @@ elif [ "$TARGET" = master ]; then
 
     $omero config set omero.master.host "$MASTER_IP"
 
+    if stat -t /config/* > /dev/null 2>&1; then
+        for f in /config/*; do
+            echo "Loading $f"
+            $omero load "$f"
+        done
+    fi
+
+    echo "Starting $TARGET"
     exec $omero admin start --foreground
 else
     MASTER_IP=$MASTER_PORT_4061_TCP_ADDR
@@ -47,6 +55,14 @@ else
 
     $omero config set omero.master.host "$MASTER_IP"
 
+    if stat -t /config/* > /dev/null 2>&1; then
+        for f in /config/*; do
+            echo "Loading $f"
+            $omero load "$f"
+        done
+    fi
+
+    echo "Master IP: $MASTER_IP Slave IP: $SLAVE_IP"
     # TODO: `omero node start` doesn't rewrite the config
     $omero admin rewrite
     sed -e "s/@omero.slave.host@/$SLAVE_IP/" -e "s/@slave.name@/$TARGET/" \
@@ -56,6 +72,7 @@ else
     sed -i -r "s|^(Ice.Default.Router=).*|\1OMERO.Glacier2/router:tcp -p 4063 -h $MASTER_IP|" \
         OMERO.server/etc/ice.config
 
+    echo "Starting node $TARGET"
     # TODO: `omero node start` doesn't support --foreground
     #exec $omero node $TARGET start
     cd $OMERO_SERVER
