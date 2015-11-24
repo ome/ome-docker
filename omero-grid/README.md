@@ -15,7 +15,7 @@ Running the images
 
 To run the Docker images start a postgres DB:
 
-    docker run -it --rm --name postgres -e POSTGRES_PASSWORD=postgres postgres
+    docker run -d --name postgres -e POSTGRES_PASSWORD=postgres postgres
 
 Then either run a single all-in-one master:
 

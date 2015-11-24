@@ -1,0 +1,11 @@
+language: python
+cache: pip
+sudo: required
+services:
+  - docker
+
+install:
+  - pip install -U docker-py
+
+script:
+    - omero-grid/test.sh
