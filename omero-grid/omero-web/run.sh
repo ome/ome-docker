@@ -1,15 +1,11 @@
 #!/bin/bash
 
-env
+set -eu
 
-export HOME=/home/omero
-cd $HOME
-omero=$HOME/OMERO.server/bin/omero
+omero=/home/omero/OMERO.py/bin/omero
 
-su -l - omero -c "$omero config set omero.web.server_list \
-    '[[\"$MASTER_PORT_4064_TCP_ADDR\", 4064, \"omero\"]]'"
-su -l - omero -c "$omero web start"
-nginx -c /home/omero/nginx.conf
+MASTER_IP=$MASTER_PORT_4064_TCP_ADDR
+$omero config set omero.web.server_list "[[\"$MASTER_IP\", 4064, \"omero\"]]"
 
-# We need a command that won't exit to keep the container running
-tail -F $HOME/OMERO.server/var/log/OMEROweb.log
+$omero web start
+exec nginx -c /etc/nginx/nginx.conf

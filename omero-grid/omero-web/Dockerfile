@@ -1,21 +1,42 @@
-FROM manics/omero-grid-omero
+FROM centos:centos7
 MAINTAINER Simon Li "spli@dundee.ac.uk"
 
-USER root
+ENV OMERO_VERSION 5.2.0
 
-RUN yum -y install nginx
+RUN yum -y install epel-release && \
+    curl -o /etc/yum.repos.d/zeroc-ice-el7.repo \
+        http://download.zeroc.com/Ice/3.5/el7/zeroc-ice-el7.repo && \
+    yum -y install http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm && \
+    yum -y install \
+        unzip wget \
+        ice ice-python \
+        python-pip \
+        numpy scipy python-matplotlib python-pillow python-tables \
+        nginx python-gunicorn && \
+    yum clean all
 
-RUN su -l - omero -c "/home/omero/OMERO.server/bin/omero web config --http 80 nginx" > \
-    /home/omero/nginx.conf
+RUN pip install 'Django<1.9' omego
 
-RUN chmod a+rx /home/omero
+RUN useradd omero && \
+    rm /etc/nginx/conf.d/* && \
+    echo 'daemon off;' >> /etc/nginx/nginx.conf && \
+    sed -i 's|/var/|/home/omero/var/|' /etc/nginx/nginx.conf && \
+    chown -R omero /etc/nginx/conf.d /var/cache/nginx
+
+USER omero
+WORKDIR /home/omero
+RUN omego download python --release $OMERO_VERSION && \
+    rm OMERO.py-*.zip && \
+    ln -s OMERO.py-*/ OMERO.py
+
+RUN mkdir -p var/run var/log/nginx
+RUN OMERO.py/bin/omero web config --http 8080 nginx > \
+    /etc/nginx/conf.d/nginx.conf
 
 ADD run.sh /home/omero/
 
-# nginx needs to be started as root
-#USER omero
-
-EXPOSE 80
+EXPOSE 8080
+VOLUME ["/var/cache/nginx", "/home/omero/var", "/home/omero/OMERO.server/var"]
 
 # Set the default command to run when starting the container
-CMD ["/bin/bash", "-e", "/home/omero/run.sh"]
+ENTRYPOINT ["/home/omero/run.sh"]
