@@ -2,12 +2,19 @@
 
 set -eu
 
-TARGET=$1
+TARGET=${1:-bash}
 
 OMERO_SERVER=/home/omero/OMERO.server
 omero=$OMERO_SERVER/bin/omero
 
-if [ "$TARGET" = master ]; then
+if [ "$TARGET" = bash ]; then
+    echo "Entering a shell"
+    exec bash -l
+elif [ "$TARGET" = master ]; then
+    shift
+    ./process_defaultxml.py OMERO.server/etc/templates/grid/default.xml.orig \
+        $@ > OMERO.server/etc/templates/grid/default.xml
+
     DBHOST=$DB_PORT_5432_TCP_ADDR
     DBUSER=${DBUSER:-omero}
     DBNAME=${DBNAME:-omero}
@@ -31,29 +38,28 @@ if [ "$TARGET" = master ]; then
     $omero config set omero.db.name "$DBNAME"
     $omero config set omero.db.pass "$DBPASS"
 
-    $omero config set Ice.Default.Host "$MASTER_IP"
+    $omero config set omero.master.host "$MASTER_IP"
 
     exec $omero admin start --foreground
-fi
-
-if [ "$TARGET" = slave ]; then
+else
     MASTER_IP=$MASTER_PORT_4061_TCP_ADDR
     SLAVE_IP=$(hostname -I)
 
-    $omero config set Ice.Default.Host "$MASTER_IP"
+    $omero config set omero.master.host "$MASTER_IP"
 
     # TODO: `omero node start` doesn't rewrite the config
     $omero admin rewrite
-    sed -i "s/@omero.slave.host@/$SLAVE_IP/" OMERO.server/etc/slave.cfg
+    sed -e "s/@omero.slave.host@/$SLAVE_IP/" -e "s/@slave.name@/$TARGET/" \
+        OMERO.server/etc/templates/slave.cfg > OMERO.server/etc/$TARGET.cfg
     grep '^Ice.Default.Router=' OMERO.server/etc/ice.config || \
         echo Ice.Default.Router= >> OMERO.server/etc/ice.config
     sed -i -r "s|^(Ice.Default.Router=).*|\1OMERO.Glacier2/router:tcp -p 4063 -h $MASTER_IP|" \
         OMERO.server/etc/ice.config
 
     # TODO: `omero node start` doesn't support --foreground
-    #exec $omero node slave start
+    #exec $omero node $TARGET start
     cd $OMERO_SERVER
-    mkdir -p var/log var/slave
-    exec icegridnode --Ice.Config=$OMERO_SERVER/etc/internal.cfg,$OMERO_SERVER/etc/slave.cfg \
+    mkdir -p var/log var/$TARGET
+    exec icegridnode --Ice.Config=$OMERO_SERVER/etc/internal.cfg,$OMERO_SERVER/etc/$TARGET.cfg \
         --nochdir
 fi

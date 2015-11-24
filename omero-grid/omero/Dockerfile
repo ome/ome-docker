@@ -27,15 +27,23 @@ RUN omego download server --release $OMERO_VERSION && \
     rm OMERO.server-*.zip && \
     ln -s OMERO.server-*/ OMERO.server
 
-ADD etc-templates.patch run.sh /home/omero/
-RUN cd OMERO.server && \
-    patch -p0 < ../etc-templates.patch
+# TODO: `Ice.Default.Host` breaks a multinode configuration, replace with
+# a different property name in templates and in `admin rewrite`
+RUN sed -i s/Ice\.Default\.Host/omero.master.host/g \
+    OMERO.server/lib/python/omero/plugins/admin.py \
+    OMERO.server/etc/templates/*.cfg OMERO.server/etc/templates/*.config \
+    OMERO.server/etc/templates/grid/*.xml
 
-USER root
+# default.xml may be modified at runtime for a multinode configuration
+RUN cp OMERO.server/etc/templates/grid/default.xml \
+    OMERO.server/etc/templates/grid/default.xml.orig
+
+ADD slave.cfg /home/omero/OMERO.server/etc/templates/
+ADD run.sh process_defaultxml.py /home/omero/
 
 EXPOSE 4061 4063 4064
 
-VOLUME ["/OMERO"]
+VOLUME ["/OMERO", "/home/omero/OMERO.server/var"]
 
 # Set the default command to run when starting the container
-#CMD ["/bin/bash", "-e", "/home/omero/run.sh"]
+ENTRYPOINT ["/home/omero/run.sh"]
