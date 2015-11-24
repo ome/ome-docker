@@ -1,5 +1,5 @@
 FROM centos:centos7
-MAINTAINER Simon Li "spli@dundee.ac.uk"
+MAINTAINER ome-devel@lists.openmicroscopy.org.uk
 
 ENV OMERO_VERSION 5.2.0
 
