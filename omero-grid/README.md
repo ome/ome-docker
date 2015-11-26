@@ -65,4 +65,4 @@ You can override the version/branch, and/or the continuous integration server, s
 
 The images will be tagged (`<user>/<image>:<tag>`) with a different user (based on the CI server if not the default) and tag (the release version or branch name) to indicate they are using a non-standard version of OMERO.
 
-In addition `omego` args can also be passed, if this is done the image name will be prefixed with `X-`.
+In addition `omego` args can also be passed, if this is done the image name will be prefixed with `x-`.

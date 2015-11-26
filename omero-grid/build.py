@@ -38,13 +38,16 @@ if args.omego:
     cmdline.extend(['--build-arg', 'OMEGO_ARGS=%s' % args.omego])
     name = 'X-%s' % image
 
-tag = args.release
+tag = '%s/%s:%s' % (user, name, args.release)
+tag = tag.lower()
 
-cmdline.extend(['-t', '%s/%s:%s' % (user, image, tag)])
+cmdline.extend(['-t', tag])
 cmdline.append(image)
 
 print 'Running: %s' % ' '.join(cmdline)
 rc = subprocess.call(cmdline)
 if rc:
-    sys.stderr.write('Non-zero return code: %d: rc\n' % rc)
+    sys.stderr.write('ERROR: Non-zero return code: %d: rc\n' % rc)
+else:
+    print 'Built :%s' % tag
 sys.exit(rc)
