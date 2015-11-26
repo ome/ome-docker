@@ -16,5 +16,5 @@ trap cleanup ERR EXIT
 ./build.py omero-grid
 ./build.py omero-grid-web
 docker run -d --name postgres -e POSTGRES_PASSWORD=postgres postgres
-docker run -d --name omero-master --link postgres:db -e DBUSER=postgres -e DBPASS=postgres -e DBNAME=postgres omero-grid master
+docker run -d --name omero-master --link postgres:db -e DBUSER=postgres -e DBPASS=postgres -e DBNAME=postgres openmicroscopy/omero-grid master
 # TBD: this doesn't yet check that they all come up.
