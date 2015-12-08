@@ -3,9 +3,15 @@ omero-deploy
 
 An all-in-one image (including postgres and nginx) for testing OMERO.server. This is not recommended for production use.
 
-To download, install and run the default server:
+To download, install and run the default server in the background:
 
     docker run -d -p 80:8080 -p 4063:4063 -p 4064:4064 openmicroscopy/omero-deploy
+
+This will immediately return an ID that you can use to follow the logs:
+
+    docker logs -f <container-id>
+
+or remove the -d flag to run in the foreground.
 
 [omego](https://github.com/ome/omego/) is used to download and install the server when the image is started (defaults to the latest release). Command arguments are appended to the `omego` command line. For example, an alternative release, a CI build, or the URL to an alternative OMERO.server zip, can be passed:
 
@@ -13,7 +19,11 @@ To download, install and run the default server:
     docker run -d openmicroscopy/omero-deploy --branch OMERO-DEV-merge-build
     docker run -d openmicroscopy/omero-deploy https://download.example.org/OMERO.server-X.zip
 
-Pass `""` to disable the automatic server installation. This will start all the required services so the server can be installed manually:
+Pass `""` to disable the automatic server installation.
+
+    docker run -d openmicroscopy/omero-deploy ""
+
+This will start all the required services so the server can be installed manually:
 
     CID=$(docker run -d openmicroscopy/omero-deploy "")
     docker exec $CID /omero-setup --release latest
