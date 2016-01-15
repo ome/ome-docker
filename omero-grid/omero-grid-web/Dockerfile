@@ -39,15 +39,15 @@ WORKDIR /home/omero
 RUN bash -c 'CI=; if [ -n "$CI_SERVER" ]; then CI="--ci $CI_SERVER"; fi; \
     omego download python $CI --release $OMERO_VERSION $OMEGO_ARGS && \
         rm OMERO.py-*.zip && \
-        ln -s OMERO.py-*/ OMERO.py'
-# Must create OMERO.py/var because it's marked as a volume and will otherwise
-# default to root ownership
-RUN mkdir -p nginx/cache nginx/log nginx/run nginx/temp OMERO.py/var
+        ln -s OMERO.py-*/ OMERO.server'
+# Must create OMERO.server/var because it's marked as a volume and will
+# otherwise default to root ownership
+RUN mkdir -p nginx/cache nginx/log nginx/run nginx/temp OMERO.server/var
 
 ADD run.sh /home/omero/
 
 EXPOSE 8080
-VOLUME ["/home/omero/nginx", "/home/omero/OMERO.py/var"]
+VOLUME ["/home/omero/nginx", "/home/omero/OMERO.server/var"]
 
 # Set the default command to run when starting the container
 ENTRYPOINT ["/home/omero/run.sh"]

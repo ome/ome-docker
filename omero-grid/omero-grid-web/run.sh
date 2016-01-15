@@ -2,7 +2,7 @@
 
 set -eu
 
-omero=/home/omero/OMERO.py/bin/omero
+omero=/home/omero/OMERO.server/bin/omero
 
 MASTER_ADDR=${MASTER_ADDR:-}
 if [ -z "$MASTER_ADDR" ]; then
