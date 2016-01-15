@@ -1,6 +1,8 @@
 FROM centos:centos7
 MAINTAINER ome-devel@lists.openmicroscopy.org.uk
 
+# TODO: Use separate Nginx container
+
 RUN yum -y install epel-release && \
     curl -o /etc/yum.repos.d/zeroc-ice-el7.repo \
         http://download.zeroc.com/Ice/3.5/el7/zeroc-ice-el7.repo && \
@@ -17,9 +19,16 @@ RUN pip install 'Django<1.9' omego
 
 RUN useradd omero && \
     rm /etc/nginx/conf.d/* && \
-    echo 'daemon off;' >> /etc/nginx/nginx.conf && \
-    sed -i 's|/var/|/home/omero/var/|' /etc/nginx/nginx.conf && \
-    chown -R omero /etc/nginx/conf.d /var/cache/nginx
+    sed -i -r -e 's|/var/([^/]+)(/nginx)?/|/home/omero/nginx/\1/|' \
+        -e '/^user/s/^/#/' /etc/nginx/nginx.conf && \
+    rm -rf /var/cache/nginx /var/log/nginx && \
+    chown -R omero /etc/nginx/conf.d && \
+    ln -sf /home/omero/nginx/cache /var/cache/nginx && \
+    ln -sf /home/omero/nginx/log /var/log/nginx
+# TODO: Use docker logging instead of log files?
+# https://github.com/nginxinc/docker-nginx/blob/master/Dockerfile
+    #ln -sf /dev/stdout /var/log/nginx/access.log && \
+    #ln -sf /dev/stderr /var/log/nginx/error.log && \
 
 ARG OMERO_VERSION=latest
 ARG CI_SERVER
@@ -31,13 +40,14 @@ RUN bash -c 'CI=; if [ -n "$CI_SERVER" ]; then CI="--ci $CI_SERVER"; fi; \
     omego download python $CI --release $OMERO_VERSION $OMEGO_ARGS && \
         rm OMERO.py-*.zip && \
         ln -s OMERO.py-*/ OMERO.py'
-
-RUN mkdir -p var/run var/log/nginx
+# Must create OMERO.py/var because it's marked as a volume and will otherwise
+# default to root ownership
+RUN mkdir -p nginx/cache nginx/log nginx/run nginx/temp OMERO.py/var
 
 ADD run.sh /home/omero/
 
 EXPOSE 8080
-VOLUME ["/var/cache/nginx", "/home/omero/var", "/home/omero/OMERO.server/var"]
+VOLUME ["/home/omero/nginx", "/home/omero/OMERO.py/var"]
 
 # Set the default command to run when starting the container
 ENTRYPOINT ["/home/omero/run.sh"]

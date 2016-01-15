@@ -22,6 +22,7 @@ if stat -t /config/* > /dev/null 2>&1; then
     done
 fi
 
+mkdir -p /home/omero/nginx/cache /home/omero/nginx/log /home/omero/nginx/temp
 NGINX_OMERO=/etc/nginx/conf.d/omero-web.conf
 if [ ! -f $NGINX_OMERO ]; then
     echo "Creating $NGINX_OMERO"
@@ -31,4 +32,4 @@ fi
 echo "Starting OMERO.web"
 $omero web start
 echo "Starting nginx"
-exec nginx -c /etc/nginx/nginx.conf
+exec nginx -g "daemon off;" -c /etc/nginx/nginx.conf
