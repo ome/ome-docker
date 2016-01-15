@@ -49,5 +49,5 @@ rc = subprocess.call(cmdline)
 if rc:
     sys.stderr.write('ERROR: Non-zero return code: %d: rc\n' % rc)
 else:
-    print 'Built :%s' % tag
+    print 'Built: %s' % tag
 sys.exit(rc)
