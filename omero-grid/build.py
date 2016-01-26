@@ -17,6 +17,8 @@ parser.add_argument('image', help='Folder containing Dockerfile')
 parser.add_argument('--release', default='latest', help='Release or branch')
 parser.add_argument('--ci', help='CI server address')
 parser.add_argument('--omego', help='Additional omego arguments')
+parser.add_argument(
+    '--tag', help='The full name/tag for the image, overrides all other naming')
 
 
 args = parser.parse_args()
@@ -38,7 +40,10 @@ if args.omego:
     cmdline.extend(['--build-arg', 'OMEGO_ARGS=%s' % args.omego])
     name = 'X-%s' % image
 
-tag = '%s/%s:%s' % (user, name, args.release)
+if args.tag:
+    tag = args.tag
+else:
+    tag = '%s/%s:%s' % (user, name, args.release)
 tag = tag.lower()
 
 cmdline.extend(['-t', tag])
