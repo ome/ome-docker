@@ -2,6 +2,11 @@
 
 set -eu
 
+if [ $# -gt 0 ]; then
+    echo "ERROR: Expected 0 args"
+    exit 2
+fi
+
 omero=/home/omero/OMERO.server/bin/omero
 
 MASTER_ADDR=${MASTER_ADDR:-}
