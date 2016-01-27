@@ -14,7 +14,7 @@ BUILD=
 CLEAN=y
 
 cleanup() {
-    docker rm -f $PREFIX-db $PREFIX-master $PREFIX-web
+    docker rm -f $PREFIX-db $PREFIX-master $PREFIX-slave-1 $PREFIX-web
 }
 
 if [ "$CLEAN" = y ]; then
@@ -27,7 +27,12 @@ cleanup || true
 ./build.py --tag $IMAGE $BUILD omero-grid
 ./build.py --tag $IMAGEWEB $BUILD omero-grid-web
 docker run -d --name $PREFIX-db -e POSTGRES_PASSWORD=postgres postgres
-docker run -d --name $PREFIX-master --link $PREFIX-db:db -e DBUSER=postgres -e DBPASS=postgres -e DBNAME=postgres $IMAGE master
+docker run -d --name $PREFIX-master --link $PREFIX-db:db \
+    -e DBUSER=postgres -e DBPASS=postgres -e DBNAME=postgres $IMAGE master \
+    master:Blitz-0,Indexer-0,DropBox,MonitorServer,FileServer,Storm,PixelData-0,Tables-0 \
+    slave-1:Processor-0
+
+docker run -d --name $PREFIX-slave-1 --link $PREFIX-master:master $IMAGE slave-1
 docker run -d --name $PREFIX-web --link $PREFIX-master:master -P $IMAGEWEB
 
 echo "Exposed web port:"
