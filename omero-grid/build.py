@@ -18,6 +18,8 @@ parser.add_argument('--release', default='latest', help='Release or branch')
 parser.add_argument('--ci', help='CI server address')
 parser.add_argument('--omego', help='Additional omego arguments')
 parser.add_argument(
+    '--no-cache', action='store_true', help='Build without Docker cache')
+parser.add_argument(
     '--tag', help='The full name/tag for the image, overrides all other naming')
 
 
@@ -39,6 +41,9 @@ name = image
 if args.omego:
     cmdline.extend(['--build-arg', 'OMEGO_ARGS=%s' % args.omego])
     name = 'X-%s' % image
+
+if args.no_cache:
+    cmdline.append('--no-cache')
 
 if args.tag:
     tag = args.tag
