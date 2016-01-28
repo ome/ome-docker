@@ -7,11 +7,11 @@ set -x
 PREFIX=omero-grid-test
 IMAGE=omero-grid:$PREFIX
 IMAGEWEB=omero-grid-web:$PREFIX
-#BUILD="--release OMERO-DEV-merge-build"
-BUILD=
+BUILD=${BUILD:-}
+CLEAN=${CLEAN:-y}
 
-#CLEAN=n
-CLEAN=y
+# Script must be run from omero-grid/
+cd "$(dirname $0)"
 
 cleanup() {
     docker rm -f $PREFIX-db $PREFIX-master $PREFIX-slave-1 $PREFIX-web

@@ -13,4 +13,4 @@ install:
   - pip install -U docker-py
 
 script:
-    - omero-grid/test.sh
+    - BUILD="--release OMERO-DEV-latest" omero-grid/test.sh
