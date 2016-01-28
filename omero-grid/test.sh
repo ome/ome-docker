@@ -38,4 +38,7 @@ docker run -d --name $PREFIX-web --link $PREFIX-master:master -P $IMAGEWEB
 echo "Exposed web port:"
 docker port $PREFIX-web
 
-# TBD: this doesn't yet check that they all come up.
+# Attempt to login to web
+bash test_login.sh
+
+# TODO: check slave is running
