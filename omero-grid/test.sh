@@ -14,7 +14,7 @@ CLEAN=${CLEAN:-y}
 cd "$(dirname $0)"
 
 cleanup() {
-    docker rm -f $PREFIX-db $PREFIX-master $PREFIX-slave-1 $PREFIX-web
+    docker rm -f -v $PREFIX-db $PREFIX-master $PREFIX-slave-1 $PREFIX-web
 }
 
 if [ "$CLEAN" = y ]; then
