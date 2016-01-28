@@ -4,13 +4,12 @@ set -e
 set -u
 set -x
 
-LOGOUT=0
+# Must be exported by the caller:
+# OMERO_USER OMERO_PASS
 
 WEB_PORT=$(docker inspect --format='{{(index (index .NetworkSettings.Ports "8080/tcp") 0).HostPort}}' omero-grid-test-web)
 
 LOGIN_URL="http://localhost:$WEB_PORT/webclient/login/"
-YOUR_USER="root"
-YOUR_PASS="omero"
 SERVER="1"
 URL="url=%2Fwebclient%2F"
 COOKIES=cookies.txt
@@ -46,7 +45,7 @@ session_id=
 while [ -z "$session_id" -a $i -lt 60 ]; do
     sleep 2
     $CURL_BIN -d \
-        "$DJANGO_TOKEN&username=$YOUR_USER&password=$YOUR_PASS&server=$SERVER&url=$URL" \
+        "$DJANGO_TOKEN&username=$OMERO_USER&password=$OMERO_PASS&server=$SERVER&url=$URL" \
     -X POST $LOGIN_URL > /dev/null || true
     session_id=$(grep sessionid cookies.txt | awk '{print $7}')
     echo -n "."

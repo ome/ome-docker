@@ -38,7 +38,15 @@ docker run -d --name $PREFIX-web --link $PREFIX-master:master -P $IMAGEWEB
 echo "Exposed web port:"
 docker port $PREFIX-web
 
-# Attempt to login to web
-bash test_login.sh
+# Smoke tests
 
-# TODO: check slave is running
+export OMERO_USER=root
+export OMERO_PASS=omero
+export PREFIX
+
+# Login to web
+bash test_login.sh
+# Now that we know the server is up, test Dropbox
+bash test_dropbox.sh
+# And Processor (slave-1)
+bash test_processor.sh
