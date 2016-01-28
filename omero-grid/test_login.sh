@@ -7,7 +7,7 @@ set -x
 # Must be exported by the caller:
 # OMERO_USER OMERO_PASS
 
-WEB_PORT=$(docker inspect --format='{{(index (index .NetworkSettings.Ports "8080/tcp") 0).HostPort}}' omero-grid-test-web)
+WEB_PORT=$(docker inspect --format='{{(index (index .NetworkSettings.Ports "8080/tcp") 0).HostPort}}' $PREFIX-web)
 
 LOGIN_URL="http://localhost:$WEB_PORT/webclient/login/"
 SERVER="1"
@@ -36,7 +36,7 @@ if [ -z "$csrf_token" ]; then
 fi
 
 echo "CSRF token: $csrf_token"
-echo -n "Attempting to login"
+echo -n "Attempting to login "
 # Retry for 2 mins
 DJANGO_TOKEN="csrfmiddlewaretoken=$csrf_token"
 i=0

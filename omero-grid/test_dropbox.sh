@@ -8,10 +8,10 @@ set -x
 # OMERO_USER OMERO_PASS PREFIX
 
 FILENAME=$(date +%Y%m%d-%H%M%S-%N).fake
-docker exec -u omero $PREFIX-master sh -c \
+docker exec $PREFIX-master sh -c \
     "mkdir -p /OMERO/DropBox/root && touch /OMERO/DropBox/root/$FILENAME"
 
-echo "Checking for imported DropBox image $FILENAME "
+echo -n "Checking for imported DropBox image $FILENAME "
 # Retry for 4 mins
 i=0
 result=
@@ -24,6 +24,7 @@ while [ $i -lt 60 ]; do
         exit 0
     fi
     if [ "$result" != "0,0" ]; then
+        echo
         echo "Unexpected query result: $result"
         exit 2
     fi
