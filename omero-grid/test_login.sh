@@ -5,7 +5,7 @@ set -u
 set -x
 
 # Must be exported by the caller:
-# OMERO_USER OMERO_PASS
+# OMERO_USER OMERO_PASS PREFIX
 
 WEB_PORT=$(docker inspect --format='{{(index (index .NetworkSettings.Ports "8080/tcp") 0).HostPort}}' $PREFIX-web)
 
