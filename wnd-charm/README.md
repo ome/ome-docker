@@ -2,4 +2,4 @@ WND-CHARM
 =========
 
 The latest [WND-CHARM](https://github.com/wnd-charm/wnd-charm) in Docker.
-If no arguments are passed this will start an IPython shell, otherwise arguments will be treated as a full command line.
+WND-CHARM is installed as a global Python module, and in addition a git checkout is present for testing.
