@@ -1,0 +1,16 @@
+language: python
+cache: pip
+sudo: required
+services:
+  - docker
+
+# Upgrade to latest docker-engine
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -y docker-engine
+
+install:
+  - pip install -U docker-py
+
+script:
+    - BUILD="--release OMERO-DEV-latest" omero-grid/test.sh
