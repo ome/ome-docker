@@ -1,6 +1,8 @@
 FROM ubuntu:14.04
 MAINTAINER ome-devel@lists.openmicroscopy.org.uk
 
+RUN update-locale LANG=C.UTF-8
+
 RUN apt-get update -y && \
     apt-get install -y openssh-server
 
