@@ -1,4 +1,5 @@
 FROM ubuntu:wily
+MAINTAINER ome-devel@lists.openmicroscopy.org.uk
 
 ENV DEBIAN_FRONTEND noninteractive
 
