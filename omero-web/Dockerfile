@@ -38,6 +38,9 @@ RUN chown omero:omero /home/omero/omeroweb.sh
 RUN chmod +x /home/omero/omeroweb.sh
 RUN chmod a+X /home/omero
 
+ADD ./omeroweb.service /etc/systemd/system/omeroweb.service
+RUN ln -s /etc/systemd/system/omeroweb.service /etc/systemd/system/multi-user.target.wants/omeroweb.service
+
 EXPOSE 80
 
 # AS OMERO user
@@ -50,7 +53,3 @@ RUN ./omeroweb.sh https://ci.openmicroscopy.org/job/OMERO-DEV-merge-build/ICE=3.
 USER root
 
 #ENTRYPOINT bash
-#CMD ["source /home/omero/omeropy-virtualenv/bin/activate; /home/omero/OMERO.py/bin/omero web start"]
-#source /home/omero/omeropy-virtualenv/bin/activate; /home/omero/OMERO.py/bin/omero web start
-#sudo systemctl enable nginx
-#sudo systemctl start nginx
