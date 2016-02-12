@@ -26,6 +26,7 @@ pip install --upgrade 'Pillow<3.0'
 pip install --upgrade -r ~omero/OMERO.py/share/web/requirements-py27-nginx.txt
 
 # configure nginx
+/home/omero/OMERO.py/bin/omero config set omero.web.server_list '[["localhost", 4064, "omero"]]'
 /home/omero/OMERO.py/bin/omero config set omero.web.application_server wsgi-tcp
 /home/omero/OMERO.py/bin/omero web config nginx > /home/omero/omero-web.conf.tmp
 
