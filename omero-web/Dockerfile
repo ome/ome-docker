@@ -1,4 +1,7 @@
 FROM openmicroscopy/omero-ssh-systemd
+ARG ZIPURL=local
+ENV ZIPURL ${ZIPURL}
+
 MAINTAINER ome-devel@lists.openmicroscopy.org.uk
 
 # To avoid error: sudo: sorry, you must have a tty to run sudo
@@ -48,7 +51,8 @@ USER omero
 ENV HOME /home/omero
 WORKDIR /home/omero
 
-RUN ./omeroweb.sh https://ci.openmicroscopy.org/job/OMERO-DEV-merge-build/ICE=3.5,jdk=8_LATEST,label=octopus/lastSuccessfulBuild/artifact/src/target/OMERO.py-5.2.1-534-6ee6dde-ice35-b233.zip
+
+RUN ./omeroweb.sh ${ZIPURL}
 
 USER root
 
