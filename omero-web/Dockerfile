@@ -25,22 +25,25 @@ RUN curl -o /etc/yum.repos.d/zeroc-ice-el7.repo \
 RUN yum install -y ice ice-python ice-servers && \
     yum clean all
 
-# install Pillow via pip
 RUN yum install -y \
     zlib-devel \
     libjpeg-devel \
     gcc && \
     yum clean all
 
+# Install nginx
 RUN yum install -y nginx && \
     yum clean all
 
+# Disable default nginx config
 RUN sed -i.bak -re 's/( default_server.*)/; #\1/' /etc/nginx/nginx.conf
+
 ADD ./omeroweb.sh /home/omero/omeroweb.sh
 RUN chown omero:omero /home/omero/omeroweb.sh
 RUN chmod +x /home/omero/omeroweb.sh
 RUN chmod a+X /home/omero
 
+# Add web to systemd
 ADD ./omeroweb.service /etc/systemd/system/omeroweb.service
 RUN ln -s /etc/systemd/system/omeroweb.service /etc/systemd/system/multi-user.target.wants/omeroweb.service
 
@@ -51,7 +54,7 @@ USER omero
 ENV HOME /home/omero
 WORKDIR /home/omero
 
-
+# Install OMERO.py from given URL
 RUN ./omeroweb.sh ${ZIPURL}
 
 USER root

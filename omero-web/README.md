@@ -15,4 +15,4 @@ On Mac OS X:
 
     docker run --privileged -ti --rm -p 8888:80 -p 2222:22 --name omeroweb omeroweb-deploy
 
-The Dockerfile starts creates the `omero` user, password `omero`, with full `sudo` rights. ssh is automatically started via systemd.
+The Dockerfile starts creates the `omero` user, password `omero`, with full `sudo` rights. OMERO.web is automatically started via systemd.
