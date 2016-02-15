@@ -5,7 +5,7 @@ ENV ZIPURL ${ZIPURL}
 MAINTAINER ome-devel@lists.openmicroscopy.org.uk
 
 # To avoid error: sudo: sorry, you must have a tty to run sudo
-RUN sed -i -e "s/Defaults    requiretty.*/ #Defaults    requiretty/g" /etc/sudoers
+RUN sed -i -re 's/Defaults\s+requiretty.*//' /etc/sudoers
 
 # OMERO.py prerequesties
 RUN yum install -y epel-release && \
