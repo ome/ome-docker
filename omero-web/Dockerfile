@@ -1,5 +1,5 @@
 FROM openmicroscopy/omero-ssh-systemd
-ARG ZIPURL=local
+ARG ZIPURL=omego
 ENV ZIPURL ${ZIPURL}
 
 MAINTAINER ome-devel@lists.openmicroscopy.org.uk

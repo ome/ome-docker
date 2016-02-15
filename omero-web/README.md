@@ -7,17 +7,21 @@ Alter omero config in omeroweb.config as needed
 
 1. Build:
 
-    build -t omeroweb-deploy --build-arg ZIPURL=https://path.to.omeropy.zip .
+    build -t omeroweb-deploy .
+
+    with custom zip:
+
+        docker build -t omeroweb-deploy --build-arg ZIPURL=https://path.to.omeropy.zip .
 
 
-2. Run on Linux:
+3. Run on Linux:
 
         docker run -ti --rm -p 8080:80 -p 2222:22 --name omeroweb omeroweb-deploy
 
     Web should be running on http://localhost:8080
 
 
-3. On Mac OS X:
+4. On Mac OS X:
 
         docker run --privileged -ti --rm -p 8080:80 -p 2222:22 --name omeroweb omeroweb-deploy
 
