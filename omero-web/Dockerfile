@@ -41,6 +41,11 @@ RUN sed -i.bak -re 's/( default_server.*)/; #\1/' /etc/nginx/nginx.conf
 ADD ./omeroweb.sh /home/omero/omeroweb.sh
 RUN chown omero:omero /home/omero/omeroweb.sh
 RUN chmod +x /home/omero/omeroweb.sh
+
+ADD ./omeroweb.config /home/omero/omeroweb.config
+RUN chown omero:omero /home/omero/omeroweb.config
+RUN chmod +x /home/omero/omeroweb.config
+
 RUN chmod a+X /home/omero
 
 # Add web to systemd

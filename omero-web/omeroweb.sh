@@ -4,6 +4,7 @@
 
 set -eux
 
+
 echo Downloading ${1}
 OMERO_ZIP=`echo "$1" | rev | cut -d / -f 1 | rev`
 OMERO_ZIP="${OMERO_ZIP%.*}"
@@ -25,9 +26,9 @@ pip install --upgrade pip
 pip install --upgrade 'Pillow<3.0'
 pip install --upgrade -r ~omero/OMERO.py/share/web/requirements-py27-nginx.txt
 
-# configure nginx
-/home/omero/OMERO.py/bin/omero config set omero.web.server_list '[["localhost", 4064, "omero"]]'
-/home/omero/OMERO.py/bin/omero config set omero.web.application_server wsgi-tcp
-/home/omero/OMERO.py/bin/omero web config nginx > /home/omero/omero-web.conf.tmp
+# load omero config
+/home/omero/OMERO.py/bin/omero load /home/omero/omeroweb.config
 
+# configure nginx
+/home/omero/OMERO.py/bin/omero web config nginx > /home/omero/omero-web.conf.tmp
 sudo cp /home/omero/omero-web.conf.tmp  /etc/nginx/conf.d/omero-web.conf
