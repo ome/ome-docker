@@ -7,7 +7,7 @@ Alter omero config in omeroweb.config as needed
 
 1. Build:
 
-    build -t omeroweb-deploy .
+        docker build -t omeroweb-deploy .
 
     with custom zip:
 
