@@ -1,7 +1,4 @@
 FROM openmicroscopy/omero-ssh-systemd
-ARG ZIPURL=omego
-ENV ZIPURL ${ZIPURL}
-
 MAINTAINER ome-devel@lists.openmicroscopy.org.uk
 
 # To avoid error: sudo: sorry, you must have a tty to run sudo
@@ -44,7 +41,6 @@ RUN chmod +x /home/omero/omeroweb.sh
 
 ADD ./omeroweb.config /home/omero/omeroweb.config
 RUN chown omero:omero /home/omero/omeroweb.config
-RUN chmod +x /home/omero/omeroweb.config
 
 RUN chmod a+X /home/omero
 
@@ -58,6 +54,8 @@ EXPOSE 80
 USER omero
 ENV HOME /home/omero
 WORKDIR /home/omero
+
+ARG ZIPURL=omego
 
 # Install OMERO.py from given URL
 RUN ./omeroweb.sh ${ZIPURL}
