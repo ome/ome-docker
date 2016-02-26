@@ -1,5 +1,6 @@
 [Unit]
 Description=OMERO.server
+Requires=postgresql.service
 
 [Service]
 User=omero
