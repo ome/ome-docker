@@ -21,6 +21,8 @@ Docker image for testing OMERO.server build from source on CentOS 7.
 
 6. To run tests within a docker container:
 
+    Make sure server is runing and fully initialized.
+
         ./runtest.sh
 
 The Dockerfile starts creates the `omero` user, password `omero`, with full `sudo` rights. OMERO.server is automatically started via systemd. Run ./runtest.sh
