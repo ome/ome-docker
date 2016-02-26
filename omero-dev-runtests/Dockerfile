@@ -31,6 +31,9 @@ RUN yum install -y git \
     gcc && \
     yum clean all
 
+RUN yum install -y python-pillow \
+    yum clean all
+
 RUN yum -y install \
     http://yum.postgresql.org/9.4/redhat/rhel-7-x86_64/pgdg-centos94-9.4-2.noarch.rpm \
     yum clean all
@@ -92,7 +95,6 @@ RUN su - postgres -c "/usr/pgsql-9.4/bin/pg_ctl start -D /var/lib/pgsql/data" &&
 ADD ./runtest.sh /home/omero/runtest.sh
 RUN chown omero:omero /home/omero/runtest.sh
 RUN chmod +x /home/omero/runtest.sh
-
 
 EXPOSE 4064
 EXPOSE 4063

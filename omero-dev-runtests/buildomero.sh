@@ -13,7 +13,7 @@ source ~omero/omero-virtualenv/bin/activate
 set -o nounset
 
 pip install --upgrade pip
-pip install --upgrade 'Pillow<3.0'
+#pip install --upgrade 'Pillow<3.0'
 pip install --upgrade omego
 
 
