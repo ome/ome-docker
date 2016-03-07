@@ -8,39 +8,38 @@ RUN sed -i -re 's/Defaults\s+requiretty.*//' /etc/sudoers
 RUN yum install -y epel-release && \
     yum clean all
 
-RUN yum install -y unzip && \
-    yum clean all
-
-RUN yum install -y \
-    python-pip python-devel python-virtualenv \
-    numpy scipy python-matplotlib python-tables && \
-    yum clean all
-  
-RUN curl -o /etc/yum.repos.d/zeroc-ice-el7.repo \
-    http://download.zeroc.com/Ice/3.5/el7/zeroc-ice-el7.repo
-
-RUN yum install -y java-1.8.0-openjdk-devel \
-    yum clean all
-
-RUN yum install -y ice ice-python-devel ice-java-devel ice-servers && \
-    yum clean all
-
-RUN yum install -y git \
+RUN yum install -y unzip \
     zlib-devel \
     libjpeg-devel \
     gcc && \
     yum clean all
 
-RUN yum install -y python-pillow \
+# Install Java
+RUN yum install -y java-1.8.0-openjdk-devel &&\
     yum clean all
 
-RUN yum -y install \
-    http://yum.postgresql.org/9.4/redhat/rhel-7-x86_64/pgdg-centos94-9.4-2.noarch.rpm \
+# Install Python and other dependences
+RUN yum install -y \
+    python-pip python-devel python-virtualenv \
+    numpy scipy \
+    python-pillow \
+    python-matplotlib python-tables && \
     yum clean all
+
+# Install Ice
+RUN curl -o /etc/yum.repos.d/zeroc-ice-el7.repo \
+    http://download.zeroc.com/Ice/3.5/el7/zeroc-ice-el7.repo
+
+RUN yum install -y ice ice-python-devel ice-java-devel ice-servers && \
+    yum clean all
+
 
 # Install Postgres Version 9.4
+RUN yum -y install \
+    http://yum.postgresql.org/9.4/redhat/rhel-7-x86_64/pgdg-centos94-9.4-2.noarch.rpm && \
+    yum clean all
 
-RUN yum -y install postgresql94-server postgresql94 \
+RUN yum -y install postgresql94-server postgresql94 && \
     yum clean all
 
 # Add postgres to systemd
