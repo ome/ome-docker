@@ -27,7 +27,7 @@ pip install --upgrade omego
 #     unzip -d /home/omero $OMERO_ZIP.zip 
 
 # using omego
-omego download --branch OMERO-DEV-merge-build openmicroscopy
+omego download --branch $OMERO_BRANCH openmicroscopy
 OMERO_ZIP=`ls | grep openmicroscopy*.zip`
 OMERO_ZIP="${OMERO_ZIP%.*}"
 

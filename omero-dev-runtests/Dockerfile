@@ -65,6 +65,7 @@ ENV HOME /home/omero
 WORKDIR /home/omero
 
 # build from source
+ARG OMERO_BRANCH=OMERO-DEV-merge-build
 RUN ./buildomero.sh
 
 
@@ -99,7 +100,7 @@ ADD ./createdb.sh /home/omero/createdb.sh
 RUN chmod +x /home/omero/createdb.sh
 RUN chown omero:omero /home/omero/createdb.sh
 
-RUN su - postgres -c "/usr/pgsql-9.4/bin/pg_ctl start -D /var/lib/pgsql/data" && sleep 1 \
+RUN su - postgres -c "/usr/pgsql-9.4/bin/pg_ctl start -D /var/lib/pgsql/data -w" \
     && sh /home/omero/createdb.sh
 
 ADD ./runtest.sh /home/omero/runtest.sh

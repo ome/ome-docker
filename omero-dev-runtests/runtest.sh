@@ -11,8 +11,7 @@ set -o nounset
 source /home/omero/settings.env
 
 # update ice.config matching settings.env
-sed "s/\(omero\.rootpass=\).*\$/\1$OMERO_ROOT_PASS/" /home/omero/OMERO.server/etc/ice.config > /tmp/ice.config
-/bin/mv -f /tmp/ice.config /home/omero/OMERO.server/etc/ice.config
+sed -i "s/\(omero\.rootpass=\).*\$/\1$OMERO_ROOT_PASS/" /home/omero/OMERO.server/etc/ice.config
 export ICE_CONFIG=/home/omero/OMERO.server/etc/ice.config
 
 # /home/omero/omero-source/build.py -f components/tools/OmeroPy/build.xml integration
