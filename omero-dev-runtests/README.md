@@ -9,11 +9,11 @@ Docker image for testing OMERO.server build from source on CentOS 7.
 
 3. Build:
 
-        docker build -rm -t omerotest .
+        docker build -t omerotest .
 
     with custom branch:
 
-        docker build -rm -t omerotest --build-arg OMERO_BRANCH=JENKINS_BRANCH .
+        docker build -t omerotest --build-arg OMERO_BRANCH=JENKINS_BRANCH .
 
     see `omego download --help` Jenkins arguments: `--branch BRANCH` for more details.
 
@@ -23,7 +23,7 @@ Docker image for testing OMERO.server build from source on CentOS 7.
 
         docker run --privileged -ti --rm -p 2222:22 --name omerotest omerotest
 
-    NOTE: you cannott forward port 4064/4063 to a different number, you have to explicitly tell omero to listen on e.g. 14064
+    NOTE: you cannot forward port 4064/4063 to a different number, you have to explicitly tell omero to listen on e.g. 14064
 
 6. To run tests within a docker container:
 

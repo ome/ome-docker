@@ -11,6 +11,8 @@ RUN yum install -y epel-release && \
 RUN yum install -y unzip \
     zlib-devel \
     libjpeg-devel \
+    libpng-devel \
+    libtiff-devel \
     gcc && \
     yum clean all
 
@@ -51,6 +53,12 @@ RUN ln -s /etc/systemd/system/postgresql.service /etc/systemd/system/multi-user.
 ADD ./settings.env /home/omero/settings.env
 RUN chmod +x /home/omero/settings.env
 RUN chown omero:omero /home/omero/settings.env
+
+
+# PIP REQUIREMENTS
+ADD ./requirements-py27.txt /home/omero/requirements-py27.txt
+RUN chmod +x /home/omero/requirements-py27.txt
+RUN chown omero:omero /home/omero/requirements-py27.txt
 
 
 # BUILD

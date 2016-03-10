@@ -13,8 +13,7 @@ source ~omero/omero-virtualenv/bin/activate
 set -o nounset
 
 pip install --upgrade pip
-#pip install --upgrade 'Pillow<3.0'
-pip install --upgrade omego
+pip install --upgrade -r /home/omero/requirements-py27.txt
 
 
 ## download source
