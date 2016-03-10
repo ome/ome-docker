@@ -17,7 +17,9 @@ Docker image for testing OMERO.server build from source on CentOS 7.
 
 5. To run on Mac OS X:
 
-        docker run --privileged -ti --rm -p 44064:4064 -p 44063:4063 -p 2222:22 --name omerotest omerotest
+        docker run --privileged -ti --rm -p 2222:22 --name omerotest omerotest
+
+    NOTE: you cannott forward port 4064/4063 to a different number, you have to explicitly tell omero to listen on e.g. 14064
 
 6. To run tests within a docker container:
 
