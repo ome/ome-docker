@@ -11,6 +11,12 @@ Docker image for testing OMERO.server build from source on CentOS 7.
 
         docker build -rm -t omerotest .
 
+    with custom branch:
+
+        docker build -rm -t omerotest --build-arg OMERO_BRANCH=JENKINS_BRANCH .
+
+    see `omego download --help` Jenkins arguments: `--branch BRANCH` for more details.
+
 4. To run on Linux see https://github.com/ome/ome-docker/tree/master/omero-ssh-systemd
 
 5. To run on Mac OS X:
