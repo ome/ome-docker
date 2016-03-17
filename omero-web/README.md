@@ -7,12 +7,9 @@ Alter omero config in omeroweb.config as needed
 
 1. Build:
 
-        docker build -t omeroweb-deploy .
+        docker build --rm -t omeroweb-deploy .
 
-    with custom zip:
-
-        docker build -t omeroweb-deploy --build-arg ZIPURL=https://path.to.omeropy.zip .
-
+    custom branch set OMEROWEB=https://path.to.omeropy.zip
 
 2. To run on Linux see https://github.com/ome/ome-docker/tree/master/omero-ssh-systemd
 
