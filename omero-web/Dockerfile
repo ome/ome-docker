@@ -13,12 +13,16 @@ RUN yum install -y git && \
 # Prepare omero-install
 ADD ./omero-install.sh /tmp/omero-install.sh
 RUN chmod +x /tmp/omero-install.sh
-RUN /tmp/omero-install.sh
+RUN bash /tmp/omero-install.sh
 
 
 # Add settings
 ADD ./settings.env /tmp/omero-install/linux/settings.env
 RUN chmod +x /tmp/omero-install/linux/settings.env
+
+# Add ARTEFACT to settings
+ARG ARTEFACT=omego
+RUN sed -i -e '1i'export ARTEFACT=$ARTEFACT'   '$1'\' /tmp/omero-install/linux/settings.env
 
 
 # Customize steps
@@ -42,7 +46,7 @@ WORKDIR /tmp/omero-install/linux
 
 
 # Install OMERO.web and its dependencies
-RUN JAVAVER=nojava PGVER=nopg sh install_centos7_nginx.sh 
+RUN JAVAVER=nojava PGVER=nopg bash install_centos7_nginx.sh
 
 
 # Open port 80
