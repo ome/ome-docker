@@ -22,16 +22,12 @@ RUN chmod +x /tmp/omero-install/linux/settings.env
 
 # Add ARTEFACT to settings
 ARG ARTEFACT=omego
-RUN sed -i -e '1i'export ARTEFACT=$ARTEFACT'   '$1'\' /tmp/omero-install/linux/settings.env
+RUN sed -i '1iexport ARTEFACT='$ARTEFACT'  '$1'\' /tmp/omero-install/linux/settings.env
 
 
 # Customize steps
 ADD ./install_steps/step04_all_omero.sh /tmp/omero-install/linux/step04_all_omero.sh
 RUN chmod +x /tmp/omero-install/linux/step04_all_omero.sh
-ADD ./install_steps/step05_centos7_nginx.sh /tmp/omero-install/linux/step05_centos7_nginx.sh
-RUN chmod +x /tmp/omero-install/linux/step05_centos7_nginx.sh
-ADD ./install_steps/step06_centos7_daemon.sh /tmp/omero-install/linux/step06_centos7_daemon.sh
-RUN chmod +x /tmp/omero-install/linux/step06_centos7_daemon.sh
 
 
 # Add omeroweb config
