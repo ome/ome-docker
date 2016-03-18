@@ -1,13 +1,16 @@
 #!/bin/bash
 
-set -e -u -x
+#start-copy
+cp setup_omero_nginx.sh ~omero
+#end-copy
 
 #start-install
 yum -y --enablerepo=cr install nginx
 
-pip install "gunicorn>=19.3"
+pip install -r ~omero/OMERO.server/share/web/requirements-py27-nginx.txt
 
-# See setup_omero*.sh for the nginx config file creation
+# set up as the omero user.
+su - omero -c "bash -eux setup_omero_nginx.sh"
 
 sed -i.bak -re 's/( default_server.*)/; #\1/' /etc/nginx/nginx.conf
 cp ~omero/OMERO.server/nginx.conf.tmp /etc/nginx/conf.d/omero-web.conf

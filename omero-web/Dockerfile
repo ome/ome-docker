@@ -4,40 +4,49 @@ MAINTAINER ome-devel@lists.openmicroscopy.org.uk
 # To avoid error: sudo: sorry, you must have a tty to run sudo
 RUN sed -i -re 's/Defaults\s+requiretty.*//' /etc/sudoers
 
+
+# Install git
 RUN yum install -y git && \
     yum clean all
 
+
+# Prepare omero-install
 ADD ./omero-install.sh /tmp/omero-install.sh
 RUN chmod +x /tmp/omero-install.sh
+RUN /tmp/omero-install.sh
 
-ADD ./settings.env /tmp/settings.env
-RUN chmod +x /tmp/settings.env
 
-ADD ./to_replace/step02_all_setup.sh /tmp/step02_all_setup.sh
-RUN chmod +x /tmp/step02_all_setup.sh
-ADD ./to_replace/step03_all_postgres.sh /tmp/step03_all_postgres.sh
-RUN chmod +x /tmp/step03_all_postgres.sh
-ADD ./to_replace/step04_all_omero.sh /tmp/step04_all_omero.sh
-RUN chmod +x /tmp/step04_all_omero.sh
-ADD ./to_replace/step05_centos7_nginx.sh /tmp/step05_centos7_nginx.sh
-RUN chmod +x /tmp/step05_centos7_nginx.sh
-ADD ./to_replace/step06_centos7_daemon.sh /tmp/step06_centos7_daemon.sh
-RUN chmod +x /tmp/step06_centos7_daemon.sh
+# Add settings
+ADD ./settings.env /tmp/omero-install/linux/settings.env
+RUN chmod +x /tmp/omero-install/linux/settings.env
 
-ADD ./to_replace/setup_centos_selinux.sh /tmp/setup_centos_selinux.sh
-RUN chmod +x /tmp/setup_centos_selinux.sh
 
+# Customize steps
+ADD ./install_steps/step04_all_omero.sh /tmp/omero-install/linux/step04_all_omero.sh
+RUN chmod +x /tmp/omero-install/linux/step04_all_omero.sh
+ADD ./install_steps/step05_centos7_nginx.sh /tmp/omero-install/linux/step05_centos7_nginx.sh
+RUN chmod +x /tmp/omero-install/linux/step05_centos7_nginx.sh
+ADD ./install_steps/step06_centos7_daemon.sh /tmp/omero-install/linux/step06_centos7_daemon.sh
+RUN chmod +x /tmp/omero-install/linux/step06_centos7_daemon.sh
+
+
+# Add omeroweb config
 ADD ./omeroweb.config /home/omero/omeroweb.config
 RUN chown omero:omero /home/omero/omeroweb.config
 
+
 RUN chmod a+X /home/omero
 
-RUN /tmp/omero-install.sh
 
 WORKDIR /tmp/omero-install/linux
 
+
+# Install OMERO.web and its dependencies
 RUN JAVAVER=nojava PGVER=nopg sh install_centos7_nginx.sh 
 
+
+# Open port 80
 EXPOSE 80
+
 
 #ENTRYPOINT bash

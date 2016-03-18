@@ -7,7 +7,7 @@ source settings.env
 
 #start-install
 
-if [ "$OMEROWEB" == "omego" ]; then
+if [ "$ARTEFACT" == "omego" ]; then
 
     virtualenv /home/omero/omero-virtualenv --system-site-packages
 
@@ -27,11 +27,11 @@ if [ "$OMEROWEB" == "omego" ]; then
 
 else
 
-    echo Downloading ${OMEROWEB}
-    OMERO_ZIP=`echo "$OMEROWEB" | rev | cut -d / -f 1 | rev`
+    echo Downloading ${ARTEFACT}
+    OMERO_ZIP=`echo "$ARTEFACT" | rev | cut -d / -f 1 | rev`
     OMERO_ZIP="${OMERO_ZIP%.*}"
 
-    curl -o ~omero/$OMERO_ZIP.zip ${1} && \
+    curl -o ~omero/$OMERO_ZIP.zip ${ARTEFACT} && \
         unzip -d /home/omero $OMERO_ZIP.zip 
 
 fi
@@ -42,6 +42,3 @@ rm $OMERO_ZIP.zip
 
 # load omero config
 /home/omero/OMERO.server/bin/omero load /home/omero/omeroweb.config
-
-OMERO.server/bin/omero config set omero.web.application_server wsgi-tcp
-OMERO.server/bin/omero web config nginx > OMERO.server/nginx.conf.tmp
