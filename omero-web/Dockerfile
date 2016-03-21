@@ -45,8 +45,7 @@ WORKDIR /tmp/omero-install/linux
 RUN JAVAVER=nojava PGVER=nopg bash install_centos7_nginx.sh
 
 
-# Open port 80
-EXPOSE 80
+EXPOSE 22 80
 
 
 #ENTRYPOINT bash
