@@ -18,6 +18,10 @@ RUN bash /tmp/omero-install.sh
 # Add settings
 ADD ./settings.env /tmp/omero-install/linux/settings.env
 RUN chmod +x /tmp/omero-install/linux/settings.env
+ADD ./omero.config.sh /home/omero/omero.config.sh
+RUN chown omero:omero /home/omero/omero.config.sh
+RUN chmod +x /home/omero/omero.config.sh
+
 
 # Add OMERO_BRANCH to settings
 ARG OMERO_BRANCH=OMERO-DEV-merge-build
@@ -29,8 +33,6 @@ RUN sed -i '1iexport ARTEFACT='$ARTEFACT'  '$1'\' /tmp/omero-install/linux/setti
 
 
 # Customize steps
-ADD ./install_steps/step01_centos7_pg_deps.sh /tmp/omero-install/linux/step01_centos7_pg_deps.sh
-RUN chmod +x /tmp/omero-install/linux/step01_centos7_pg_deps.sh
 ADD ./install_steps/step04_all_omero.sh /tmp/omero-install/linux/step04_all_omero.sh
 RUN chmod +x /tmp/omero-install/linux/step04_all_omero.sh
 
@@ -46,8 +48,10 @@ ARG ICEVER=ice35-devel
 ARG JAVAVER=openjdk18-devel
 RUN JAVAVER=$JAVAVER ICEVER=$ICEVER PGVER=$PGVER bash install_centos7_nginx.sh
 
+
+# CUSTOMIZE database initialization
 RUN su - postgres -c "/usr/pgsql-9.4/bin/pg_ctl start -D /var/lib/pgsql/9.4/data -w" \
-    && sh /home/omero/createdb.sh
+    && sh /home/omero/_step03_all_postgres.sh
 
 
 ADD ./runtest.sh /home/omero/runtest.sh
