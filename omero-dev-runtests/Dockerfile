@@ -40,7 +40,7 @@ RUN chmod a+X /home/omero
 WORKDIR /tmp/omero-install/linux
 
 
-# Install OMERO.web and its dependencies
+# Build and install OMERO and its dependencies
 ARG PGVER=pg94
 ARG ICEVER=ice35-devel
 ARG JAVAVER=openjdk18-devel
@@ -55,8 +55,6 @@ RUN chown omero:omero /home/omero/runtest.sh
 RUN chmod +x /home/omero/runtest.sh
 
 
-EXPOSE 4064
-EXPOSE 4063
-EXPOSE 80
+EXPOSE 22 80 4063 4064
 
 #ENTRYPOINT bash
