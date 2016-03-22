@@ -14,8 +14,9 @@ Docker image for testing installation via ansible on CentOS 7 with systemd.
         docker run --privileged -ti --rm 2222:22 --name devansible devansible
 
 4. SSH:
+    docker ip can be obtained from $(docker-machine ip dev)
 
-        ssh -p 2222 omero@$(docker-machine ip dev)
+        ssh -p 2222 omero@192.168.99.100
 
 5. Install via ansible:
 
@@ -35,6 +36,7 @@ Docker image for testing installation via ansible on CentOS 7 with systemd.
                 - role: python-devel
 
     - test:
+
             $ ansible-playbook -i hosts example-playbook.yml
             PLAY ***************************************************************************
 
