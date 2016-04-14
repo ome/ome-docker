@@ -21,9 +21,11 @@ RUN useradd omero && \
 	echo 'omero:omero' | chpasswd && \
 	echo "omero ALL= (ALL) NOPASSWD: ALL" >> /etc/sudoers.d/omero
 
-
 RUN rm -f /lib/systemd/system/systemd*udev* ; \
 	rm -f /lib/systemd/system/getty.target;
+
+RUN yum install -y initscripts \
+	&& yum clean all
 
 EXPOSE 22
 
