@@ -24,9 +24,6 @@ RUN useradd omero && \
 RUN rm -f /lib/systemd/system/systemd*udev* ; \
 	rm -f /lib/systemd/system/getty.target;
 
-RUN yum install -y initscripts \
-	&& yum clean all
-
 EXPOSE 22
 
 # This will automatically start systemd
