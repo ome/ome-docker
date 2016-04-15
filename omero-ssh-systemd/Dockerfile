@@ -21,6 +21,8 @@ RUN useradd omero && \
 	echo 'omero:omero' | chpasswd && \
 	echo "omero ALL= (ALL) NOPASSWD: ALL" >> /etc/sudoers.d/omero
 
+# Workaround as there is no need for udev or getty in containers.
+# see https://bugzilla.redhat.com/show_bug.cgi?id=1046469#c11
 RUN rm -f /lib/systemd/system/systemd*udev* ; \
 	rm -f /lib/systemd/system/getty.target;
 
