@@ -15,17 +15,20 @@ RUN yum install -y \
     python-pip python-devel python-virtualenv \
     numpy scipy python-matplotlib python-tables && \
     yum clean all
-  
-RUN curl -o /etc/yum.repos.d/zeroc-ice-el7.repo \
-    http://download.zeroc.com/Ice/3.5/el7/zeroc-ice-el7.repo
 
-RUN yum install -y ice ice-python ice-servers && \
+RUN curl -o /etc/yum.repos.d/zeroc-ice-el7.repo \
+    https://download.zeroc.com/rpm/zeroc-ice-el7.repo
+
+RUN yum install -y ice-all-runtime && \
     yum clean all
 
 RUN yum install -y \
     zlib-devel \
+    bzip2-devel \
     libjpeg-devel \
-    gcc && \
+    openssl-devel \
+    gcc \
+    gcc-c++ && \
     yum clean all
 
 # Install nginx
