@@ -1,14 +1,14 @@
-***************************
-Getting Started with Docker
-***************************
+*********************
+Internal Docker Files
+*********************
 
-* Clone this repository
-* Install Docker
+This files are a collection of various docker
+files used by the OME team. If you are looking
+for supported Docker files, search for "docker"
+in the GitHub repository:
 
-******************************
-Creating your own Docker image
-******************************
+   https://github.com/openmicroscopy?utf8=%E2%9C%93&query=docker
 
-* Choose which version of Ice you want to run
-* Change into that directory
-* Run `sudo docker build -t YOURNAME/SOMENAME .`
+Or see the Docker Hub organization:
+
+   https://hub.docker.com/u/openmicroscopy/
