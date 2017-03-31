@@ -5,7 +5,7 @@ An all-in-one image (including postgres and nginx) for testing OMERO.server. Thi
 
 To download, install and run the default server in the background:
 
-    docker run -d -p 80:8080 -p 4063:4063 -p 4064:4064 openmicroscopy/omero-deploy
+    docker run -d -p 8080:80 -p 4063:4063 -p 4064:4064 openmicroscopy/omero-deploy
 
 This will immediately return an ID that you can use to follow the logs:
 
