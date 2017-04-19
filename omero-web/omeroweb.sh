@@ -35,6 +35,8 @@ fi
 ln -s ~omero/$OMERO_ZIP ~omero/OMERO.py && \
 rm $OMERO_ZIP.zip
 
+pip install zeroc-ice
+
 pip install --upgrade pip
 pip install --upgrade 'Pillow<3.0'
 pip install --upgrade -r ~omero/OMERO.py/share/web/requirements-py27-nginx.txt
