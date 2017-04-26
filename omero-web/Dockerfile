@@ -4,62 +4,48 @@ MAINTAINER ome-devel@lists.openmicroscopy.org.uk
 # To avoid error: sudo: sorry, you must have a tty to run sudo
 RUN sed -i -re 's/Defaults\s+requiretty.*//' /etc/sudoers
 
-# OMERO.py prerequesties
-RUN yum install -y epel-release && \
+
+# Install git
+RUN yum install -y git && \
     yum clean all
 
-RUN yum install -y unzip && \
-    yum clean all
 
-RUN yum install -y \
-    python-pip python-devel python-virtualenv \
-    numpy scipy python-matplotlib python-tables && \
-    yum clean all
-  
-RUN curl -o /etc/yum.repos.d/zeroc-ice-el7.repo \
-    http://download.zeroc.com/Ice/3.5/el7/zeroc-ice-el7.repo
+# Prepare omero-install
+ADD ./omero-install.sh /tmp/omero-install.sh
+RUN chmod +x /tmp/omero-install.sh
+RUN bash /tmp/omero-install.sh
 
-RUN yum install -y ice ice-python ice-servers && \
-    yum clean all
 
-RUN yum install -y \
-    zlib-devel \
-    libjpeg-devel \
-    gcc && \
-    yum clean all
+# Add settings
+ADD ./settings.env /tmp/omero-install/linux/settings.env
+RUN chmod +x /tmp/omero-install/linux/settings.env
 
-# Install nginx
-RUN yum install -y nginx && \
-    yum clean all
+# Add ARTEFACT to settings
+ARG ARTEFACT=omego
+RUN sed -i '1iexport ARTEFACT='$ARTEFACT'  '$1'\' /tmp/omero-install/linux/settings.env
 
-# Disable default nginx config
-RUN sed -i.bak -re 's/( default_server.*)/; #\1/' /etc/nginx/nginx.conf
 
-ADD ./omeroweb.sh /home/omero/omeroweb.sh
-RUN chown omero:omero /home/omero/omeroweb.sh
-RUN chmod +x /home/omero/omeroweb.sh
+# Customize steps
+ADD ./install_steps/step04_all_omero.sh /tmp/omero-install/linux/step04_all_omero.sh
+RUN chmod +x /tmp/omero-install/linux/step04_all_omero.sh
 
+
+# Add omeroweb config
 ADD ./omeroweb.config /home/omero/omeroweb.config
 RUN chown omero:omero /home/omero/omeroweb.config
 
+
 RUN chmod a+X /home/omero
 
-# Add web to systemd
-ADD ./omeroweb.service /etc/systemd/system/omeroweb.service
-RUN ln -s /etc/systemd/system/omeroweb.service /etc/systemd/system/multi-user.target.wants/omeroweb.service
 
-EXPOSE 80
+WORKDIR /tmp/omero-install/linux
 
-# AS OMERO user
-USER omero
-ENV HOME /home/omero
-WORKDIR /home/omero
 
-ARG ZIPURL=omego
+# Install OMERO.web and its dependencies
+RUN JAVAVER=nojava PGVER=nopg bash install_centos7_nginx.sh
 
-# Install OMERO.py from given URL
-RUN ./omeroweb.sh ${ZIPURL}
 
-USER root
+EXPOSE 22 80
+
 
 #ENTRYPOINT bash
